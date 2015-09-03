@@ -135,7 +135,8 @@ public class SQLWorker {
      *
      * @param SQL SQL to send to the database server
      * @param parameters Parameters to substitute ?:s for in the SQL string
-     * @return The first row of the result set, converted into an Object array
+     * @return The first row of the result set, converted into an Object array, or <code>null</code> if there were no
+     * rows coming back from the query
      * @throws SQLException If any database error occurred
      */
     public Object[] top(String SQL, Object... parameters) throws SQLException {
@@ -157,11 +158,15 @@ public class SQLWorker {
      * @param SQL SQL to send to the database server
      * @param parameters Parameters to substitute ?:s for in the SQL string
      * @return The first row of the result set, converted into an String array where each element in the array is the
-     * .toString() result of each object in the result set
+     * .toString() result of each object in the result set, or <code>null</code> if there were no
+     * rows coming back from the query
      * @throws SQLException If any database error occurred
      */
     public String[] topAsString(String SQL, Object... parameters) throws SQLException {
         final Object[] rowAsObjects = top(SQL, parameters);
+        if(rowAsObjects == null) {
+            return null;
+        }
         final String[] rowAsStrings = new String[rowAsObjects.length];
         for (int i = 0; i < rowAsObjects.length; i++) {
             rowAsStrings[i] = rowAsObjects[i] != null ? rowAsObjects[i].toString() : null;
