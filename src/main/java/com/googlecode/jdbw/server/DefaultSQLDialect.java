@@ -143,6 +143,11 @@ public class DefaultSQLDialect implements SQLDialect {
     }
 
     @Override
+    public String getUseCatalogStatement(String catalogName) {
+        return "use " + escapeIdentifier(catalogName);
+    }
+
+    @Override
     public boolean isCompatible(int fromSqlType, int toSqlType) {
         if(fromSqlType == toSqlType) {
             return true;

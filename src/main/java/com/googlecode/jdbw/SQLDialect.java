@@ -125,6 +125,18 @@ public interface SQLDialect {
     String getDefaultSchemaName();
     
     /**
+     * Gets the SQL code to run for switching the active catalog over to the one with the name passed in, or returns 
+     * <code>null</code> if the database server does not support this operation.
+     * Certain database servers allows you to switch the "active" catalog which all SQL operations are  implicitly run 
+     * against, for example MySQL has the "use" keyword while others like PostgreSQL does not support this functionality
+     * at all.
+     * @param catalogName Name of the catalog to switch to
+     * @return The SQL statement to run for making the supplied catalog the active one, or <code>null</code> the 
+     * database does not support switching catalogs.
+     */
+    String getUseCatalogStatement(String catalogName);
+    
+    /**
      * This method will tell you if this database server can convert from one data type to another implicitly.
      * @param fromSqlType JDBC SQL type we want to convert from (constants out of java.sql.Types)
      * @param toSqlType JDBC SQL type we want to convert to (constants out of java.sql.Types)

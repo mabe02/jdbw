@@ -36,6 +36,11 @@ public class H2SQLDialect extends DefaultSQLDialect {
     public String escapeIdentifier(String identifier) {
         return "\"" + identifier + "\"";
     }
+
+    @Override
+    public String getUseCatalogStatement(String catalogName) {
+        return null;
+    }
     
     @Override
     public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes) {
