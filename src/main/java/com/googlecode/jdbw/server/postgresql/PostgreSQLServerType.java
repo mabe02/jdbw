@@ -18,6 +18,7 @@
  */
 package com.googlecode.jdbw.server.postgresql;
 
+import com.googlecode.jdbw.SQLDialect;
 import com.googlecode.jdbw.server.AbstractDatabaseType;
 
 /**
@@ -29,6 +30,11 @@ public class PostgreSQLServerType extends AbstractDatabaseType {
     public static final PostgreSQLServerType INSTANCE = new PostgreSQLServerType();
     
     private PostgreSQLServerType() {
+    }
+
+    @Override
+    public SQLDialect getSQLDialect() {
+        return new PostgreSQLDialect();
     }
     
     @Override
