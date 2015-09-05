@@ -241,7 +241,8 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
     // servers which may or may not support all of JDBC. Please see 
     // MySQLExecutor for an example.
     protected boolean canGetGeneratedKeys(String SQL) {
-        return SQL.trim().substring(0, "insert".length()).toLowerCase().equals("insert");
+        return SQL.trim().length() >= "insert".length() &&
+                SQL.trim().substring(0, "insert".length()).toLowerCase().equals("insert");
     }
 
     protected ResultSet getGeneratedKeys(PreparedStatement statement) throws SQLException {
