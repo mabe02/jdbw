@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.joda.time.DateMidnight;
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -183,7 +184,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
         JDBCObjectStorage instance = getObjectStorage();
         Person.Builder builder = instance.getBuilderFactory().newObject(Person.Builder.class, 4);
         builder.setAge(85);
-        builder.setBirthday(new DateMidnight("1890-03-12").toDate());
+        builder.setBirthday(new LocalDate("1890-03-12").toDate());
         builder.setName("Evert Tabue");
         Person evert = builder.build();
         Person result = instance.put(evert);
@@ -194,7 +195,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
         assertEquals(4, (int)result.getId());
         assertEquals(85, result.getAge());
         assertEquals("Evert Tabue", result.getName());
-        assertEquals(new DateMidnight("1890-03-12").toDate(), result.getBirthday());
+        assertEquals(new LocalDate("1890-03-12"), new LocalDate(result.getBirthday()));
         assertEquals(4, instance.getSize(Person.class));
         assertEquals(4, getWorker().topLeftValueAsInt("SELECT COUNT(*) FROM \"Person\"").intValue());
         assertArrayEquals(
@@ -212,7 +213,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
         assertEquals(4, (int)result.getId());
         assertEquals(85, result.getAge());
         assertEquals("Evert Taube", result.getName());
-        assertEquals(new DateMidnight("1890-03-12").toDate(), result.getBirthday());
+        assertEquals(new LocalDate("1890-03-12"), new LocalDate(result.getBirthday()));
         assertEquals(4, instance.getSize(Person.class));        
         assertEquals(4, getWorker().topLeftValueAsInt("SELECT COUNT(*) FROM \"Person\"").intValue());
         assertArrayEquals(
