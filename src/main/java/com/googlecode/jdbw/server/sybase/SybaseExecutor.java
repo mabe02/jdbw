@@ -18,9 +18,11 @@
  */
 package com.googlecode.jdbw.server.sybase;
 
+import com.googlecode.jdbw.ResultSetInformation;
 import com.googlecode.jdbw.impl.SQLExecutorImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
@@ -31,6 +33,11 @@ class SybaseExecutor extends SQLExecutorImpl {
     
     SybaseExecutor(Connection connection) {
         super(connection);
+    }
+
+    @Override
+    protected ResultSetInformation newResultSetInformation(ResultSetMetaData resultSetMetaData, int resultSetCounter) throws SQLException {
+        return new SybaseResultSetInformation(resultSetMetaData, resultSetCounter);
     }
     
     @Override

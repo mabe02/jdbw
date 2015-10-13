@@ -38,19 +38,49 @@ public class ResultSetInformationImpl implements ResultSetInformation {
         this.columns = new ArrayList<Column>(resultSetMetaData.getColumnCount());
 
         for(int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-            columnLabels.add(resultSetMetaData.getColumnLabel(i));
-            columnTypes.add(resultSetMetaData.getColumnType(i));
-            columns.add(
-                    new Column(
-                            i,
-                            resultSetMetaData.getColumnLabel(i),
-                            resultSetMetaData.getColumnType(i),
-                            resultSetMetaData.getColumnTypeName(i),
-                            resultSetMetaData.getColumnDisplaySize(i),
-                            resultSetMetaData.getScale(i),
-                            resultSetMetaData.isNullable(i),
-                            resultSetMetaData.isAutoIncrement(i) ? "YES" : "NO") {});
+            String columnLabel = extractColumnLabel(resultSetMetaData, i);
+            int columnType = extractColumnType(resultSetMetaData, i);
+            
+            columnLabels.add(columnLabel);
+            columnTypes.add(columnType);
+            columns.add(new Column(
+                            i, 
+                            columnLabel, 
+                            columnType,
+                            extractColumnTypeName(resultSetMetaData, i),
+                            extractColumnDisplaySize(resultSetMetaData, i),
+                            extractScale(resultSetMetaData, i),
+                            extractNullable(resultSetMetaData, i), 
+                            extractAutoIncrement(resultSetMetaData, i)) {});
         }
+    }
+
+    protected String extractColumnLabel(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.getColumnLabel(i);
+    }
+
+    protected int extractColumnType(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.getColumnType(i);
+    }
+
+    protected String extractColumnTypeName(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.getColumnTypeName(i);
+    }
+
+    protected int extractColumnDisplaySize(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.getColumnDisplaySize(i);
+    }
+
+    protected int extractScale(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.getScale(i);
+    }
+
+    protected int extractNullable(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.isNullable(i);
+    }
+
+    protected String extractAutoIncrement(ResultSetMetaData resultSetMetaData1, int i) throws SQLException {
+        return resultSetMetaData1.isAutoIncrement(i) ? "YES" : "NO";
     }
 
     @Override
