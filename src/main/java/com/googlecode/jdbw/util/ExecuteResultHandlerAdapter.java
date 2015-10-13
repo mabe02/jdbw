@@ -55,4 +55,8 @@ public class ExecuteResultHandlerAdapter implements ExecuteResultHandler {
     @Override
     public void onDone() {
     }
+
+    @Override
+    public void onCancellableCallback(Cancellable cancelCallback) {
+    }
 }

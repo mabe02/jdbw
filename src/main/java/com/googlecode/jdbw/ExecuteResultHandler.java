@@ -18,6 +18,7 @@
  */
 package com.googlecode.jdbw;
 
+import com.googlecode.jdbw.util.Cancellable;
 import com.googlecode.jdbw.util.ExecuteResultHandlerAdapter;
 import java.sql.SQLWarning;
 
@@ -83,4 +84,13 @@ public interface ExecuteResultHandler {
      * This method is called when all processing of the query is done and the statement is about to be closed.
      */
     void onDone();
+    
+    /**
+     * Called at the start of a database operation to expose a callback to to 
+     * cancel the operation.
+     * 
+     * @param cancelCallback Interface that can be used to cancel the database
+     *                       operation.
+     */
+    void onCancellableCallback(Cancellable cancelCallback);
 }

@@ -21,6 +21,7 @@ package com.googlecode.jdbw.impl;
 
 import com.googlecode.jdbw.*;
 import com.googlecode.jdbw.util.BatchUpdateHandlerAdapter;
+import com.googlecode.jdbw.util.Cancellable;
 import com.googlecode.jdbw.util.ExecuteResultHandlerAdapter;
 import com.googlecode.jdbw.util.NullValue;
 import org.slf4j.Logger;
@@ -66,14 +67,22 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
 
     @Override
     public void execute(ExecuteResultHandler handler, int maxRowsToFetch, int queryTimeoutInSeconds, String SQL, Object... parameters) throws SQLException {
-        PreparedStatement statement = null;
         ResultSet resultSet = null;
+        final PreparedStatement statement = prepareExecuteStatement(SQL);
         try {
-            statement = prepareExecuteStatement(SQL);
             for (int i = 0; i < parameters.length; i++) {
                 setParameter(statement, parameters[i], i + 1);
             }
 
+            if(canCancelQueries()) {
+                handler.onCancellableCallback(new Cancellable() {
+                    @Override
+                    public void cancel() throws Exception {
+                        statement.cancel();
+                    }
+                });
+            }
+            
             setQueryTimeout(statement, queryTimeoutInSeconds);
             setMaxRowsToFetch(statement, maxRowsToFetch);
             execute(statement);
@@ -106,7 +115,7 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
 
                 boolean gotCancel = false;
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                if (!handler.onResultSet(new ResultSetInformationImpl(resultSetMetaData, resultSetCounter++))) {
+                if (!handler.onResultSet(newResultSetInformation(resultSetMetaData, resultSetCounter))) {
                     gotCancel = true;
                 }
 
@@ -245,6 +254,14 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
                 SQL.trim().substring(0, "insert".length()).toLowerCase().equals("insert");
     }
 
+    protected boolean canCancelQueries() {
+        return true;
+    }
+
+    protected ResultSetInformation newResultSetInformation(ResultSetMetaData resultSetMetaData, int resultSetCounter) throws SQLException {
+        return new ResultSetInformationImpl(resultSetMetaData, resultSetCounter++);
+    }
+    
     protected ResultSet getGeneratedKeys(PreparedStatement statement) throws SQLException {
         return statement.getGeneratedKeys();
     }
