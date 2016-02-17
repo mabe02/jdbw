@@ -263,6 +263,11 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     public AutoExecutor createAutoExecutor() {
         return new AutoExecutor(dataSource, databaseServerType);
     }
+
+    @Override
+    public AutoExecutor createAutoExecutor(TransactionIsolation isolation) {
+        return new AutoExecutor(dataSource, databaseServerType, isolation);
+    }
     
     private Connection getConnection() throws SQLException {
         return dataSource.getConnection();

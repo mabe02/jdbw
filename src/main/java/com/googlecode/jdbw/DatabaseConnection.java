@@ -63,6 +63,13 @@ public interface DatabaseConnection {
      * @return AutoExecutor using this connection
      */
     AutoExecutor createAutoExecutor();
+    
+    /**
+     * Creates an AutoExecutor using this database connection for supplying connections
+     * @param isolation Transactional isolation mode to put connections in
+     * @return AutoExecutor using this connection
+     */
+    AutoExecutor createAutoExecutor(TransactionIsolation isolation);
 
     /**
      * @return Default catalog name of this connection
