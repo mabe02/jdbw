@@ -22,6 +22,7 @@ package com.googlecode.jdbw;
 import com.googlecode.jdbw.metadata.Catalog;
 import java.sql.SQLException;
 import java.util.List;
+import javax.sql.DataSource;
 
 /**
  * This interface represents a connection to a database server, although in 
@@ -71,6 +72,12 @@ public interface DatabaseConnection {
      */
     AutoExecutor createAutoExecutor(TransactionIsolation isolation);
 
+    /**
+     * Returns the underlying data source that is backing this {@code DatabaseConnection}. <b>Use with caution!</b>
+     * @return Underlying data source backing this {@code DatabaseConnection}
+     */
+    DataSource getDataSource();
+    
     /**
      * @return Default catalog name of this connection
      */
