@@ -102,8 +102,10 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
                 int updateCount = getUpdateCount(statement);
                 if (updateCount != -1) {
                     handler.onUpdateCount(updateCount);
-                    statement.getMoreResults();
-                    continue;
+                    if (getResultSet(statement) == null) {
+                        statement.getMoreResults();
+                        continue;
+                    }
                 }
                 resultSet = getResultSet(statement);
                 if (resultSet == null) {
