@@ -23,8 +23,8 @@ package com.googlecode.jdbw.util;
  * This class is a null value representation when dealing with SQL parameters. The reason why this is needed is that
  * some database servers requires you to supply what 'type' of null (as in, is it a {@code varchar} null, an {@code int}
  * null or something else) you are giving. Trying to assign null of a wrong type will give you an SQLException.
- * <p/>
- * <p/>Since the Java {@code null} keyword has no type information, when you supply it to a JDBW class database method
+ * <p>
+ * Since the Java {@code null} keyword has no type information, when you supply it to a JDBW class database method
  * (for example, {@code SQLWorker.query(...)} or {@code SQLExecutor.execute(...)}) in the parameter list, type
  * {@code varchar} will be associated with this null. If this is incompatible with your database server/table/column,
  * you can instead of null pass in an instance of one of the subclasses of this class. There isn't a subclass for every

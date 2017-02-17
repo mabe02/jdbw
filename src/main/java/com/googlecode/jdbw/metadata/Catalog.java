@@ -26,7 +26,7 @@ import java.util.List;
  * organization in the database, where each data domain is assigned a distinct catalog. A catalog will in turn consist
  * of one or more <i>schemas</i> that divides the objects further.
  * 
- * <p/>Some database servers only supports one catalog. If the concept of catalog doesn't exist in the terminology of
+ * <p>Some database servers only supports one catalog. If the concept of catalog doesn't exist in the terminology of
  * the server you are using, JDBW can be expected to create a "dummy" catalog object for you.
  * 
  * @see Schema

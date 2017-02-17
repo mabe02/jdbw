@@ -32,7 +32,7 @@ import java.util.Set;
  * have the {@code null} value, representing the absence of a value) or <i>not
  * nullable</i> (trying to assign {@code null} will give an error). 
  * 
- * <p/>Normally you don't construct {@code Column} objects yourself, rather you
+ * <p>Normally you don't construct {@code Column} objects yourself, rather you
  * get them by using methods on other objects that holds columns.
  * 
  * @see Table

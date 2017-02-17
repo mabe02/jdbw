@@ -113,12 +113,12 @@ public enum TransactionIsolation {
     /**
      * Returns the isolation level associated with an integer constant in java.sql.Connection describing isolation
      * levels. Will throw IllegalArgumentException if the level didn't match any of the constants in Connection.
-     * @param level Level to get the {@TransactionIsolation} for
+     * @param level Level to get the {@link TransactionIsolation} for
      * @return The isolation level object associated with this value
-     * @throw IllegalArgumentException If the integer value passed in doesn't match any of the isolation level constants
+     * @throws IllegalArgumentException If the integer value passed in doesn't match any of the isolation level constants
      * in java.sql.Connection.
      */
-    public static TransactionIsolation fromLevel(int level) {
+    public static TransactionIsolation fromLevel(int level) throws IllegalArgumentException {
         for(TransactionIsolation isolation : values()) {
             if(level == isolation.level) {
                 return isolation;

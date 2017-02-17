@@ -25,7 +25,7 @@ import java.sql.SQLException;
  * transaction when you are done with it. Remember this applies even when handling exceptions, you must declare yourself
  * done with the transaction so that the connection can be returned to there original data source. Failure to do so may
  * starve the connection pool.
- * <p/>
+ * <p>
  * Once you have committed or rolled back the transaction, this transaction object cannot be used anymore, you must ask
  * for a new one.
  *

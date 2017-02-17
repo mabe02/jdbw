@@ -113,6 +113,7 @@ public class Schema implements Comparable<Schema> {
 
     /**
      * Loads a view under this schema with a particular name, represented by a {@code View} object
+     * @param viewName Name of the view
      * @return The requested view, or {@code null} if no such view existed under this schema
      * @throws SQLException If an error occurred while reading the list of views
      */

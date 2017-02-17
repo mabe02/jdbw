@@ -28,7 +28,7 @@ import java.util.List;
  * generic parameter V, you can force the whole DataSet to have the same type, for example String. Has a nice toString()
  * implementation that will format the data in an ASCII table.
  * @author Martin Berglund
- * @param <V>
+ * @param <V> Value type for this DataSet
  */
 public class DataSet<V> implements Iterable<V[]> {
 

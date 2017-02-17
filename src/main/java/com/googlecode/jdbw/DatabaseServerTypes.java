@@ -30,7 +30,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * This is a repository of known database server types. If you have created your own database server type, you can add
- * it in here to the {@ALL_KNOWN_SERVER_TYPES} constants (this isn't required though).
+ * it in here to the {@link #ALL_KNOWN_SERVER_TYPES} constants (this isn't required though).
  * @author Martin Berglund
  */
 public class DatabaseServerTypes {

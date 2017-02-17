@@ -30,7 +30,7 @@ import java.util.List;
  * This utility class can be very helpful when sending simple queries to the database and you don't want to get too
  * involved in the details. It will help you to send queries and get result back in simple and familiar formats, as well
  * as grabbing only limited parts of the result set.
- * <p/>
+ * <p>
  * You create an SQLWorker on top of an SQLExecutor, so it supports both using AutoExecutor and using transactions.
  *
  * @author Martin Berglund
@@ -340,6 +340,7 @@ public class SQLWorker {
     /**
      * Sends a query to the database and returns the whole result as a {@code DataSet} of a specified type.
      *
+     * @param <V> Type binding for the {@link DataSet}
      * @param typeClass What type build the {@code DataSet} of
      * @param mapper Converter to use when converting the result set values into the target type
      * @param SQL SQL to send to the database server

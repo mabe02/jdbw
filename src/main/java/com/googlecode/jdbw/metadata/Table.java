@@ -52,9 +52,9 @@ public class Table implements Comparable<Table> {
     /**
      * Creates a new table object based on a specified schema that it belongs to, a name and a meta-data resolving
      * object to be used when loading further details about this table
-     * @param metaDataResolver
-     * @param schema
-     * @param tableName
+     * @param metaDataResolver Data resolver to use for meta data operations
+     * @param schema Name of the schema
+     * @param tableName Name of the table
      */
     public Table(ServerMetaData metaDataResolver, Schema schema, String tableName) {
         this.metaDataResolver = metaDataResolver;

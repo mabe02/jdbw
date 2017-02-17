@@ -23,11 +23,11 @@ package com.googlecode.jdbw.metadata;
  * been pre-created on the server and has been compiled into some intermediate
  * format, to be executed by a specific command. Normally this code is some kind 
  * of imperative SQL-like language, but could really be anything.
- * 
- * <p/>A stored procedure may or may not have input parameters and some database
+ * <p>
+ * A stored procedure may or may not have input parameters and some database
  * servers also supports output parameters to give data back to the caller.
- * 
- * <p/>You normally won't create instances of this class yourself, but rather
+ * <p>
+ * You normally won't create instances of this class yourself, but rather
  * will be supplied with them by asking a {@code Schema} to give you the list 
  * of stored procedures it has.
  * 
