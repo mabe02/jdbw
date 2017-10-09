@@ -43,7 +43,7 @@ import javax.sql.DataSource;
  * </ul>
  * @author Martin Berglund
  */
-public interface DatabaseConnection {
+public interface DatabaseConnection extends AutoCloseable {
     
     /**
      * @return Type of the server this connection is connected to
