@@ -33,9 +33,9 @@ public class ResultSetInformationImpl implements ResultSetInformation {
     public ResultSetInformationImpl(ResultSetMetaData resultSetMetaData, int index) throws SQLException {
         this.resultSetMetaData = resultSetMetaData;
         this.resultSetIndex = index;
-        this.columnLabels = new ArrayList<String>(resultSetMetaData.getColumnCount());
-        this.columnTypes = new ArrayList<Integer>(resultSetMetaData.getColumnCount());
-        this.columns = new ArrayList<Column>(resultSetMetaData.getColumnCount());
+        this.columnLabels = new ArrayList<>(resultSetMetaData.getColumnCount());
+        this.columnTypes = new ArrayList<>(resultSetMetaData.getColumnCount());
+        this.columns = new ArrayList<>(resultSetMetaData.getColumnCount());
 
         for(int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
             String columnLabel = extractColumnLabel(resultSetMetaData, i);

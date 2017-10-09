@@ -36,8 +36,8 @@ public class DataSet<V> implements Iterable<V[]> {
     private final List<V[]> rows;
 
     private DataSet(List<String> columnNames, List<V[]> rows) {
-        this.columnNames = Collections.unmodifiableList(new ArrayList<String>(columnNames));
-        this.rows = Collections.unmodifiableList(new ArrayList<V[]>(rows));
+        this.columnNames = Collections.unmodifiableList(new ArrayList<>(columnNames));
+        this.rows = Collections.unmodifiableList(new ArrayList<>(rows));
     }
 
     public List<String> getColumnNames() {
@@ -51,7 +51,7 @@ public class DataSet<V> implements Iterable<V[]> {
 
     @Override
     public String toString() {
-        List<Integer> columnSizes = new ArrayList<Integer>(columnNames.size());
+        List<Integer> columnSizes = new ArrayList<>(columnNames.size());
         for (String columnName : columnNames) {
             columnSizes.add(columnName.length());
         }
@@ -130,11 +130,12 @@ public class DataSet<V> implements Iterable<V[]> {
         private final List<V[]> rows;
 
         public Builder(List<String> columnNames) {
-            this.columnNames = Collections.unmodifiableList(new ArrayList<String>(columnNames));
-            this.rows = new ArrayList<V[]>();
+            this.columnNames = Collections.unmodifiableList(new ArrayList<>(columnNames));
+            this.rows = new ArrayList<>();
         }
 
-        public void addRow(V[] row) {
+        @SuppressWarnings("unchecked")
+        public void addRow(V... row) {
             if(row.length != columnNames.size()) {
                 throw new IllegalArgumentException("Incorrect size, expected " + columnNames.size() + " values but got " + row.length);
             }
@@ -142,7 +143,7 @@ public class DataSet<V> implements Iterable<V[]> {
         }
 
         public DataSet<V> build() {
-            return new DataSet<V>(columnNames, rows);
+            return new DataSet<>(columnNames, rows);
         }
     }
 }

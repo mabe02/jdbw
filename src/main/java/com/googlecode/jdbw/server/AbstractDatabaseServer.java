@@ -64,7 +64,7 @@ public abstract class AbstractDatabaseServer<T extends DatabaseConnectionFactory
         return getDriverDescriptor().createDatabaseConnectionFactory(this);
     }
     
-    private static final Set<String> REGISTERED_DRIVERS = new ConcurrentSkipListSet<String>();
+    private static final Set<String> REGISTERED_DRIVERS = new ConcurrentSkipListSet<>();
     private void registerJDBCDriver(String driverClassName) {
         if(REGISTERED_DRIVERS.add(driverClassName)) {
             try {

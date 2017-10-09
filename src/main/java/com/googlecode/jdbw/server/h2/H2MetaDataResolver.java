@@ -23,6 +23,7 @@ import com.googlecode.jdbw.metadata.DefaultServerMetaData;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import javax.sql.DataSource;
 
 /**
@@ -38,7 +39,7 @@ public class H2MetaDataResolver extends DefaultServerMetaData {
     @Override
     public Catalog getCatalog(String catalogName) throws SQLException {
         for(Catalog catalog: getCatalogs()) {
-            if(catalog.getName().equals(catalogName.toUpperCase())) {
+            if(Objects.equals(catalog.getName(), catalogName.toUpperCase())) {
                 return catalog;
             }
         }

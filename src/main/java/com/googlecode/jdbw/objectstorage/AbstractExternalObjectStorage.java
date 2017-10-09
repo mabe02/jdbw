@@ -39,7 +39,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
-    protected <O extends Storable> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
+    protected <O extends Storable<?>> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
         if(localStorage instanceof AbstractObjectStorage) {
             return ((AbstractObjectStorage)localStorage).getStorableTypeFromObject(object);
         }
@@ -51,7 +51,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
-    public <O extends Storable> boolean contains(O object) {
+    public <K, O extends Storable<K>> boolean contains(O object) {
         if(localContains(object)) {
             return true;
         }
@@ -77,7 +77,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
-    public <O extends Storable> List<O> getAll(Class<O> type) {
+    public <K, O extends Storable<K>> List<O> getAll(Class<O> type) {
         List<O> objects = localStorage.getAll(type);
         if(objects.isEmpty()) {
             objects = remoteGetAll(type);
@@ -86,7 +86,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
-    public <O extends Storable> int getSize(Class<O> type) {
+    public <O extends Storable<?>> int getSize(Class<O> type) {
         int size = localStorage.getSize(type);
         if(size == 0) {
             return remoteGetSize(type);
@@ -95,7 +95,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
-    public <O extends Storable> boolean localContains(O object) {
+    public <K, O extends Storable<K>> boolean localContains(O object) {
         return localStorage.contains(object);
     }
 
@@ -109,25 +109,27 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
         return localStorage.get(type, key);
     }
     
-    protected <O extends Storable> List<O> localGetAll(Class<O> type) {
+    protected <K, O extends Storable<K>> List<O> localGetAll(Class<O> type) {
         return localStorage.getAll(type);
     }
     
-    protected <O extends Storable> void localPut(Collection<O> objects) {
+    protected <K, O extends Storable<K>> void localPut(Collection<O> objects) {
         localStorage.putAll(objects);
     }
     
     @Override
-    public <O extends Storable> void localRemove(O... objects) {
+    @SuppressWarnings("unchecked")
+    public <K, O extends Storable<K>> void localRemove(O... objects) {
         localStorage.remove(objects);
     }
 
     @Override
-    public <O extends Storable> void localRemove(Collection<O> objects) {
+    public <K, O extends Storable<K>> void localRemove(Collection<O> objects) {
         localStorage.remove(objects);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>> void localRemove(Class<O> objectType, K... ids) {
         localStorage.remove(objectType, ids);
     }
@@ -160,6 +162,7 @@ public abstract class AbstractExternalObjectStorage extends AbstractObjectStorag
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>> List<O> remoteGetSome(Class<O> type, K... keys) {
         return remoteGetSome(type, Arrays.asList(keys));
     }

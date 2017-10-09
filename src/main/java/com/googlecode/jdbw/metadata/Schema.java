@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * In database terminology, especially in the JDBC world, a <i>Schema</i> is a middle level organizational container.
@@ -84,7 +85,7 @@ public class Schema implements Comparable<Schema> {
      */
     public Map<String, Table> getTableMap() throws SQLException {
         List<Table> tables = getTables();
-        Map<String, Table> map = new HashMap<String, Table>();
+        Map<String, Table> map = new HashMap<>();
         for(Table table : tables) {
             map.put(table.getName(), table);
         }
@@ -150,6 +151,6 @@ public class Schema implements Comparable<Schema> {
         if(obj == null || !(obj instanceof Schema)) {
             return false;
         }
-        return toString().equals(obj.toString());
+        return Objects.equals(toString(), obj.toString());
     }
 }

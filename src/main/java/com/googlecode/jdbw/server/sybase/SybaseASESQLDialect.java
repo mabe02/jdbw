@@ -51,7 +51,7 @@ public class SybaseASESQLDialect extends DefaultSQLDialect {
 
     private static final String HEXES = "0123456789abcdef";
 
-    private String getHex(byte[] raw)
+    private String getHex(byte... raw)
     {
         if(raw == null) {
             return null;
@@ -76,7 +76,7 @@ public class SybaseASESQLDialect extends DefaultSQLDialect {
     @Override
     public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes)
     {
-        List<String> statements = new ArrayList<String>();
+        List<String> statements = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE ").append(name).append("(\n");
         for(Column column: columns) {

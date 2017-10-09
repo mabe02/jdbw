@@ -34,7 +34,7 @@ class MySQLTableMappingFactory extends DelegatingTableMappingFactory {
     }
     
     @Override
-    public TableMapping createTableMapping(Class<? extends Storable> objectType) {
+    public TableMapping createTableMapping(Class<? extends Storable<?>> objectType) {
         return new MySQLTableMapping(super.createTableMapping(objectType));
     }
     

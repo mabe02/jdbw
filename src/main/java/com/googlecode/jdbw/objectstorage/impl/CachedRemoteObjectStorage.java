@@ -38,13 +38,13 @@ public class CachedRemoteObjectStorage extends AbstractExternalObjectStorage {
     }
 
     @Override
-    public <O extends Storable> void register(Class<O> objectType) {
+    public <O extends Storable<?>> void register(Class<O> objectType) {
         remoteObjectStorage.register(objectType);
         getLocalStorage().register(objectType);
     }
 
     @Override
-    public <O extends Storable> O put(O object) {
+    public <K, O extends Storable<K>> O put(O object) {
         try {
             return remoteObjectStorage.put(object);
         }
@@ -54,7 +54,7 @@ public class CachedRemoteObjectStorage extends AbstractExternalObjectStorage {
     }
 
     @Override
-    public <O extends Storable> List<O> putAll(Collection<O> objects) {
+    public <K, O extends Storable<K>> List<O> putAll(Collection<O> objects) {
         try {
             return remoteObjectStorage.putAll(objects);
         }
@@ -70,13 +70,13 @@ public class CachedRemoteObjectStorage extends AbstractExternalObjectStorage {
     }
 
     @Override
-    public <O extends Storable> void removeAll(Class<O> objectType) {
+    public <K, O extends Storable<K>> void removeAll(Class<O> objectType) {
         remoteObjectStorage.removeAll(objectType);
         localRemoveAll(objectType);
     }
 
     @Override
-    public <O extends Storable> boolean remoteContains(O object) {
+    public <K, O extends Storable<K>> boolean remoteContains(O object) {
         return remoteObjectStorage.contains(object);
     }
 
@@ -93,7 +93,7 @@ public class CachedRemoteObjectStorage extends AbstractExternalObjectStorage {
     }
 
     @Override
-    public <O extends Storable> List<O> remoteGetAll(Class<O> type) {
+    public <K, O extends Storable<K>> List<O> remoteGetAll(Class<O> type) {
         List<O> objects = remoteObjectStorage.getAll(type);
         localRemoveAll(type);
         localPut(objects);
@@ -101,7 +101,7 @@ public class CachedRemoteObjectStorage extends AbstractExternalObjectStorage {
     }
 
     @Override
-    public <O extends Storable> int remoteGetSize(Class<O> type) {
+    public <O extends Storable<?>> int remoteGetSize(Class<O> type) {
         return remoteObjectStorage.getSize(type);
     }
     

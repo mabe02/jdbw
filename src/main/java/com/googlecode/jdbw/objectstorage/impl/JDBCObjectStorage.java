@@ -52,7 +52,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     private final DatabaseConnection databaseConnection;
     private final TableMappingFactory tableMappingFactory;
     private final ObjectFactory objectFactory;
-    private final ConcurrentHashMap<Class, TableMapping> tableMappings;
+    private final ConcurrentHashMap<Class<?>, TableMapping> tableMappings;
     private final int retryAttempts;
 
     public JDBCObjectStorage(DatabaseConnection databaseConnection) {
@@ -79,7 +79,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
         this.databaseConnection = databaseConnection;
         this.tableMappingFactory = tableMappingFactory;
         this.objectFactory = objectFactory;
-        this.tableMappings = new ConcurrentHashMap<Class, TableMapping>();
+        this.tableMappings = new ConcurrentHashMap<>();
         this.retryAttempts = retryAttempts;
     }
 
@@ -88,7 +88,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> void register(Class<O> objectType) {
+    public <O extends Storable<?>> void register(Class<O> objectType) {
         if(objectType == null) {
             throw new IllegalArgumentException("Cannot call JDBCObjectStorage.register(...) with null object");
         }
@@ -99,7 +99,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     public ObjectBuilderFactory getBuilderFactory() {
         return new DefaultObjectBuilderFactory() {
             @Override
-            protected FieldMapping getFieldMapping(Class<? extends Storable> objectType) {
+            protected FieldMapping getFieldMapping(Class<? extends Storable<?>> objectType) {
                 if(tableMappings.containsKey(objectType)) {
                     return tableMappings.get(objectType);
                 }
@@ -111,7 +111,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> boolean contains(O object) {
+    public <K, O extends Storable<K>> boolean contains(O object) {
         if(object == null) {
             throw new IllegalArgumentException("Cannot call JDBCObjectStorage.contains(...) with null object");
         }
@@ -160,7 +160,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> List<O> getAll(Class<O> type) {
+    public <K, O extends Storable<K>> List<O> getAll(Class<O> type) {
         if(!tableMappings.containsKey(type)) {
             throw new IllegalArgumentException("Cannot call JDBCObjectStorage.getAll(...) non-registered type " + type.getSimpleName());
         }
@@ -177,7 +177,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> int getSize(Class<O> type) {
+    public <O extends Storable<?>> int getSize(Class<O> type) {
         if(!tableMappings.containsKey(type)) {
             throw new IllegalArgumentException("Cannot call JDBCObjectStorage.getSize(...) non-registered type " + type.getSimpleName());
         }        
@@ -193,14 +193,14 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> O put(O object) {
+    public <K, O extends Storable<K>> O put(O object) {
         return putAll(object).get(0);
     }
 
     @Override
-    public <O extends Storable> List<O> putAll(Collection<O> objects) {
+    public <K, O extends Storable<K>> List<O> putAll(Collection<O> objects) {
         Class<O> objectType;
-        objects = Utils.removeNullElements(new ArrayList(objects));
+        objects = Utils.removeNullElements(new ArrayList<>(objects));
         if(objects.isEmpty()) {
             return Collections.emptyList();
         }
@@ -233,7 +233,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> void removeAll(Class<O> objectType) {
+    public <K, O extends Storable<K>> void removeAll(Class<O> objectType) {
         if(!tableMappings.containsKey(objectType)) {
             throw new IllegalArgumentException("Cannot call JDBCObjectStorage.getAll(...) non-registered type " + objectType.getSimpleName());
         }
@@ -248,39 +248,39 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    protected <O extends Storable> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
+    protected <O extends Storable<?>> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
         Class<O> type = super.getStorableTypeFromObject(object);
         if(type != null) {
             return type;
         }
         
         //Custom detection
-        Class candidate = (Class)object.getClass();
+        Class<O> candidate = (Class<O>)object.getClass();
         if(tableMappings.containsKey(candidate)) {
            type = candidate; 
         }
         else if(object instanceof Proxy) {
             InvocationHandler invocationHandler = Proxy.getInvocationHandler(object);
             if(invocationHandler instanceof ObjectProxyHandler) {
-                type = (Class)((ObjectProxyHandler)invocationHandler).getFieldMapping().getObjectType();
+                type = (Class<O>)((ObjectProxyHandler)invocationHandler).getFieldMapping().getObjectType();
             }
         }        
         return type;
     }
     
-    protected <O extends Storable> List<O> transform(Class<O> type, FieldMapping fieldMapping, List<Object[]> rows) {
-        List<O> result = new ArrayList<O>();
+    protected <O extends Storable<?>> List<O> transform(Class<O> type, FieldMapping fieldMapping, List<Object[]> rows) {
+        List<O> result = new ArrayList<>();
         for(Object[] row: rows) {
             result.add(objectFactory.newObject(type, fieldMapping, row));
         }
         return result;
     }
     
-    protected <O extends Storable> Object[] transform(FieldMapping fieldMapping, O object) {
+    protected <O extends Storable<?>> Object[] transform(FieldMapping fieldMapping, O object) {
         return transform(fieldMapping, object, true);
     }
     
-    protected <O extends Storable> Object[] transform(FieldMapping fieldMapping, O object, boolean idAtFirst) {
+    protected <O extends Storable<?>> Object[] transform(FieldMapping fieldMapping, O object, boolean idAtFirst) {
         Object[] result = new Object[fieldMapping.getFieldNames().size() + 1];
         if(idAtFirst) {
             result[0] = object.getId();
@@ -303,7 +303,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
         return result;
     }
 
-    private <O extends Storable> List<O> doRetryingPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws ObjectStorageException {
+    private <O extends Storable<?>> List<O> doRetryingPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws ObjectStorageException {
         for(int i = 0; i < retryAttempts; i++) {
             try {
                 doPutAll(objectType, objects, tableMapping);
@@ -322,10 +322,10 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
                 }
             }
         }
-        return new ArrayList<O>(objects);
+        return new ArrayList<>(objects);
     }
 
-    protected <O extends Object & Storable> void doPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws SQLException {
+    protected <O extends Object & Storable<?>> void doPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws SQLException {
         DatabaseTransaction transaction = null;
         try {
             int count = 0;
@@ -336,9 +336,9 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
             String sql = tableMapping.getSelectKeys(databaseConnection.getServerType().getSQLDialect(), objects.size());
             transaction = databaseConnection.beginTransaction(TransactionIsolation.REPEATABLE_READ);
             SQLWorker worker = new SQLWorker(transaction);
-            Set<Object> existingRows = new HashSet<Object>(worker.leftColumn(sql, allKeys));
-            List<O> toBeUpdated = new ArrayList<O>();
-            List<O> toBeInserted = new ArrayList<O>();
+            Set<Object> existingRows = new HashSet<>(worker.leftColumn(sql, allKeys));
+            List<O> toBeUpdated = new ArrayList<>();
+            List<O> toBeInserted = new ArrayList<>();
             for(O object: objects) {
                 if(existingRows.contains(object.getId())) {
                     toBeUpdated.add(object);
@@ -349,7 +349,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
             }
             if(!toBeInserted.isEmpty()) {
                 sql = tableMapping.getInsert(databaseConnection.getServerType().getSQLDialect());
-                List<Object[]> batch = new ArrayList<Object[]>();
+                List<Object[]> batch = new ArrayList<>();
                 for(O o: toBeInserted) {
                     batch.add(transform(tableMapping, o));
                 }
@@ -357,7 +357,7 @@ public class JDBCObjectStorage extends AbstractObjectStorage {
             }
             if(!toBeUpdated.isEmpty()) {
                 sql = tableMapping.getUpdate(databaseConnection.getServerType().getSQLDialect());
-                List<Object[]> batch = new ArrayList<Object[]>();
+                List<Object[]> batch = new ArrayList<>();
                 for(O o: toBeUpdated) {
                     batch.add(transform(tableMapping, o, false));
                 }

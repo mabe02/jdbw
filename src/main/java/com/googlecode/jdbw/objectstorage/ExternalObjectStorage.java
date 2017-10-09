@@ -23,11 +23,11 @@ import java.util.List;
 
 public interface ExternalObjectStorage extends ObjectStorage {
     
-    <O extends Storable> boolean localContains(O object);
+    <K, O extends Storable<K>> boolean localContains(O object);
     
     <K, O extends Storable<K>> boolean localContains(Class<O> type, K key);
     
-    <O extends Storable> boolean remoteContains(O object);
+    <K, O extends Storable<K>> boolean remoteContains(O object);
     
     <K, O extends Storable<K>> boolean remoteContains(Class<O> type, K key);
     
@@ -36,19 +36,22 @@ public interface ExternalObjectStorage extends ObjectStorage {
     <K, O extends Storable<K>> O remoteGet(O object);
     
     <K, O extends Storable<K>> O localGet(Class<O> type, K key);
-    
+
+    @SuppressWarnings("unchecked")
     <K, O extends Storable<K>> List<O> remoteGetSome(Class<O> type, K... keys);
     
     <K, O extends Storable<K>> List<O> remoteGetSome(Class<O> type, Collection<K> keys);
 
-    <O extends Storable> List<O> remoteGetAll(Class<O> type);
+    <K, O extends Storable<K>> List<O> remoteGetAll(Class<O> type);
     
-    <O extends Storable> int remoteGetSize(Class<O> type);
-    
-    <O extends Storable> void localRemove(O... objects);
+    <O extends Storable<?>> int remoteGetSize(Class<O> type);
 
-    <O extends Storable> void localRemove(Collection<O> objects);
-    
+    @SuppressWarnings("unchecked")
+    <K, O extends Storable<K>> void localRemove(O... objects);
+
+    <K, O extends Storable<K>> void localRemove(Collection<O> objects);
+
+    @SuppressWarnings("unchecked")
     <K, O extends Storable<K>> void localRemove(Class<O> objectType, K... ids);
     
     <K, O extends Storable<K>> void localRemove(Class<O> objectType, Collection<K> ids);

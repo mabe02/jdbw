@@ -2,6 +2,7 @@ package com.googlecode.jdbw.util;
 
 import java.sql.*;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
@@ -95,7 +96,7 @@ abstract class DelegatingConnection implements Connection
             return c == null;
         }
         else {
-            return innerCon.equals(c);
+            return Objects.equals(innerCon, c);
         }
     }
 
@@ -115,10 +116,10 @@ abstract class DelegatingConnection implements Connection
         if(obj instanceof DelegatingConnection) {
             DelegatingConnection c = (DelegatingConnection) obj;
             Connection cDelegate = c.getInnermostDelegateInternal();
-            return delegate == cDelegate || (delegate != null && delegate.equals(cDelegate));
+            return Objects.equals(delegate, cDelegate);
         }
         else {
-            return delegate.equals(obj);
+            return Objects.equals(delegate, obj);
         }
     }
 
@@ -249,7 +250,7 @@ abstract class DelegatingConnection implements Connection
     }
 
     @Override
-    public Map getTypeMap() throws SQLException {
+    public Map<String,Class<?>> getTypeMap() throws SQLException {
         return _conn.getTypeMap();
     }
 
@@ -332,7 +333,7 @@ abstract class DelegatingConnection implements Connection
     }
 
     @Override
-    public void setTypeMap(Map map) throws SQLException {
+    public void setTypeMap(Map<String,Class<?>> map) throws SQLException {
         _conn.setTypeMap(map);
     }
 

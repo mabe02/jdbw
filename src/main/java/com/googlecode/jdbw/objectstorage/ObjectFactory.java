@@ -19,5 +19,5 @@
 package com.googlecode.jdbw.objectstorage;
 
 public interface ObjectFactory {
-    <O extends Storable> O newObject(Class<O> type, FieldMapping fieldMapping, Object[] idAndValues);
+    <O extends Storable<?>> O newObject(Class<O> type, FieldMapping fieldMapping, Object... idAndValues);
 }

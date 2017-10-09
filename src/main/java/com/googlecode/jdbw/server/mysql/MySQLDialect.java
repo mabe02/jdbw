@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class implements various traits and dialectal features of the MySQL-brand SQL.
@@ -52,7 +53,7 @@ class MySQLDialect extends DefaultSQLDialect {
     
     private static final String HEXES = "0123456789ABCDEF";
 
-    private String getHex(byte[] raw) {
+    private String getHex(byte... raw) {
         if(raw == null) {
             return null;
         }
@@ -109,7 +110,7 @@ class MySQLDialect extends DefaultSQLDialect {
     public Object convertToCompatibleType(Column targetColumnType, Object object) {
         if(targetColumnType.getSqlType() == java.sql.Types.TIMESTAMP
                 && object instanceof Date) {
-            if("1900-01-01 00:00:00.0".equals(object.toString())) {
+            if(Objects.equals("1900-01-01 00:00:00.0", object.toString())) {
                 return "1970-01-01 00:00:01";
             }
         }

@@ -30,11 +30,11 @@ import com.googlecode.jdbw.server.StandardDatabaseServer;
  */
 public class PostgreSQLJDBCDriverDescriptor implements JDBCDriverDescriptor<AuthenticatingDatabaseConnectionFactory> {
     @Override
-    public String formatJDBCUrl(DatabaseServer databaseServer) {
+    public String formatJDBCUrl(DatabaseServer<AuthenticatingDatabaseConnectionFactory> databaseServer) {
         return formatJDBCUrl(
-                ((StandardDatabaseServer)databaseServer).getHostname(),
-                ((StandardDatabaseServer)databaseServer).getPort(),
-                ((StandardDatabaseServer)databaseServer).getDefaultCatalog());
+                ((StandardDatabaseServer<AuthenticatingDatabaseConnectionFactory>)databaseServer).getHostname(),
+                ((StandardDatabaseServer<AuthenticatingDatabaseConnectionFactory>)databaseServer).getPort(),
+                ((StandardDatabaseServer<AuthenticatingDatabaseConnectionFactory>)databaseServer).getDefaultCatalog());
     }
 
     /**
@@ -54,7 +54,7 @@ public class PostgreSQLJDBCDriverDescriptor implements JDBCDriverDescriptor<Auth
     }
 
     @Override
-    public AuthenticatingDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer databaseServer) {
+    public AuthenticatingDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer<AuthenticatingDatabaseConnectionFactory> databaseServer) {
         return new AuthenticatingDatabaseConnectionFactory(PostgreSQLServerType.INSTANCE, formatJDBCUrl(databaseServer));
     }
 }

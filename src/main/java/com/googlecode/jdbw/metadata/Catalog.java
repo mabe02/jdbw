@@ -20,6 +20,7 @@ package com.googlecode.jdbw.metadata;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A database catalog, sometimes known as a "database" on the database server. This is normally the highest level of
@@ -100,6 +101,6 @@ public class Catalog implements Comparable<Catalog> {
 
         Catalog other = (Catalog) obj;
         return metaDataResolver == other.metaDataResolver
-                && getName().equals(other.getName());
+                && Objects.equals(getName(), other.getName());
     }
 }

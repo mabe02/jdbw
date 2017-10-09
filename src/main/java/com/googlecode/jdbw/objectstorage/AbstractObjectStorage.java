@@ -42,21 +42,23 @@ public abstract class AbstractObjectStorage implements ObjectStorage {
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>> List<O> getSome(Class<O> type, K... keys) {
         return getSome(type, Arrays.asList(keys));
     }
 
     @Override
-    public <O extends Storable> List<O> putAll(O... objects) {
+    @SuppressWarnings("unchecked")
+    public <K, O extends Storable<K>> List<O> putAll(O... objects) {
         return putAll(Arrays.asList(objects));
     }
 
     @Override
-    public <O extends Storable> List<O> putAll(Collection<O> objects) {
+    public <K, O extends Storable<K>> List<O> putAll(Collection<O> objects) {
         if(objects == null) {
             throw new IllegalArgumentException("Passing null to putAll(...) is not allowed");
         }
-        List<O> toReturn = new ArrayList<O>();
+        List<O> toReturn = new ArrayList<>();
         for(O object: objects) {
             if(object != null) {
                 toReturn.add(put(object));
@@ -66,14 +68,15 @@ public abstract class AbstractObjectStorage implements ObjectStorage {
     }
 
     @Override
-    public <O extends Storable> void remove(O... objects) {
+    @SuppressWarnings("unchecked")
+    public <K, O extends Storable<K>> void remove(O... objects) {
         remove(Arrays.asList(objects));
     }
 
     @Override
-    public <O extends Storable> void remove(Collection<O> objects) {
+    public <K, O extends Storable<K>> void remove(Collection<O> objects) {
         Class<O> type = null;
-        List<Object> keysToRemove = new ArrayList<Object>();
+        List<K> keysToRemove = new ArrayList<>();
         for(O object: objects) {
             if(object != null) {
                 if(type == null) {
@@ -91,11 +94,12 @@ public abstract class AbstractObjectStorage implements ObjectStorage {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>> void remove(Class<O> objectType, K... ids) {
         remove(objectType, Arrays.asList(ids));
     }
 
-    protected <O extends Storable> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
+    protected <O extends Storable<?>> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
         if(object instanceof SelfDescribingStorable) {
             return ((SelfDescribingStorable)object).storableType();
         }

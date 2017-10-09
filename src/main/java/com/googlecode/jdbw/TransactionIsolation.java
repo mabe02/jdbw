@@ -19,6 +19,7 @@
 package com.googlecode.jdbw;
 
 import java.sql.Connection;
+import java.util.Objects;
 
 /**
  * This enum contains the various levels of transactional isolation supported by JDBC. These values are all derived from
@@ -103,7 +104,7 @@ public enum TransactionIsolation {
             return null;
         }
         for(TransactionIsolation isolation : values()) {
-            if(label.equals(isolation.label)) {
+            if(Objects.equals(label, isolation.label)) {
                 return isolation;
             }
         }

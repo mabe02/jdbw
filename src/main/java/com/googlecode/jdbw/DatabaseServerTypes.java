@@ -40,7 +40,7 @@ public class DatabaseServerTypes {
      * This constant keeps track of all known database server types. The list is statically defined but you can add your
      * own types to it if you wish; the Set can be added to.
      */
-    public static final Set<DatabaseServerType> ALL_KNOWN_SERVER_TYPES = new AddOnlySet<DatabaseServerType>();
+    public static final Set<DatabaseServerType> ALL_KNOWN_SERVER_TYPES = new AddOnlySet<>();
 
     /**
      * DatabaseServerType implementation for MySQL (mostly compatible with MariaDB and other derivatives)

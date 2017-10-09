@@ -19,5 +19,5 @@
 package com.googlecode.jdbw.objectstorage;
 
 public interface TableMappingFactory {
-    TableMapping createTableMapping(Class<? extends Storable> objectType);
+    TableMapping createTableMapping(Class<? extends Storable<?>> objectType);
 }

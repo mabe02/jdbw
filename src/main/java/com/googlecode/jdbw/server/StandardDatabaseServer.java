@@ -21,6 +21,8 @@ package com.googlecode.jdbw.server;
 import com.googlecode.jdbw.DatabaseConnectionFactory;
 import com.googlecode.jdbw.JDBCDriverDescriptor;
 
+import java.util.Objects;
+
 /**
  * A common base class for {@code DatabaseServer}s with are connected to over a network. This class provides some helper 
  * methods and some default implementations for the interface methods. 
@@ -71,8 +73,8 @@ public abstract class StandardDatabaseServer<T extends DatabaseConnectionFactory
         if (!getClass().isAssignableFrom(obj.getClass())) {
             return false;
         }
-        final StandardDatabaseServer other = (StandardDatabaseServer) obj;
-        if ((this.hostname == null) ? (other.hostname != null) : !this.hostname.equals(other.hostname)) {
+        final StandardDatabaseServer<T> other = (StandardDatabaseServer<T>)obj;
+        if (!Objects.equals(this.hostname, other.hostname)) {
             return false;
         }
         return this.port == other.port;

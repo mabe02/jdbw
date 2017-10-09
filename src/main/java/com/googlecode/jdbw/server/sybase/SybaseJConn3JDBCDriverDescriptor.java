@@ -31,11 +31,11 @@ import com.googlecode.jdbw.server.StandardDatabaseServer;
 public class SybaseJConn3JDBCDriverDescriptor implements JDBCDriverDescriptor<SybaseDatabaseConnectionFactory> {
 
     @Override
-    public String formatJDBCUrl(DatabaseServer databaseServer) {
+    public String formatJDBCUrl(DatabaseServer<SybaseDatabaseConnectionFactory> databaseServer) {
         return formatJDBCUrl(
-                ((StandardDatabaseServer)databaseServer).getHostname(),
-                ((StandardDatabaseServer)databaseServer).getPort(),
-                ((StandardDatabaseServer)databaseServer).getDefaultCatalog());
+                ((StandardDatabaseServer<SybaseDatabaseConnectionFactory>)databaseServer).getHostname(),
+                ((StandardDatabaseServer<SybaseDatabaseConnectionFactory>)databaseServer).getPort(),
+                ((StandardDatabaseServer<SybaseDatabaseConnectionFactory>)databaseServer).getDefaultCatalog());
     }
 
     /**
@@ -55,7 +55,7 @@ public class SybaseJConn3JDBCDriverDescriptor implements JDBCDriverDescriptor<Sy
     }
 
     @Override
-    public SybaseDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer databaseServer) {
+    public SybaseDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer<SybaseDatabaseConnectionFactory> databaseServer) {
         return new SybaseDatabaseConnectionFactory(formatJDBCUrl(databaseServer));
     }
 }

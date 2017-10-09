@@ -26,6 +26,7 @@ import com.googlecode.jdbw.objectstorage.ObjectCache;
 import com.googlecode.jdbw.objectstorage.ObjectCacheFactory;
 import com.googlecode.jdbw.objectstorage.ObjectStorageException;
 import com.googlecode.jdbw.objectstorage.Storable;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultObjectStorage extends AbstractObjectStorage {
     
     private final FieldMappingFactory fieldMappingFactory;
-    private final ObjectCacheFactory objectCacheFactory;
-    private final ConcurrentHashMap<Class, Cell> storageCells;
+    private final ObjectCacheFactory<?, ?> objectCacheFactory;
+    private final ConcurrentHashMap<Class<?>, Cell<?, ? extends Storable<?>>> storageCells;
 
     public DefaultObjectStorage() {
         this(new DefaultFieldMappingFactory());
@@ -47,14 +48,14 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
         this(fieldMappingFactory, new ConcurrentHashMapObjectCache.Factory());
     }
 
-    public DefaultObjectStorage(FieldMappingFactory fieldMappingFactory, ObjectCacheFactory objectCacheFactory) {
+    public DefaultObjectStorage(FieldMappingFactory fieldMappingFactory, ObjectCacheFactory<?, ?> objectCacheFactory) {
         this.fieldMappingFactory = fieldMappingFactory;
         this.objectCacheFactory = objectCacheFactory;
-        storageCells = new ConcurrentHashMap<Class, Cell>();
+        storageCells = new ConcurrentHashMap<>();
     }
     
     @Override
-    public <O extends Storable> void register(Class<O> objectType) {
+    public <O extends Storable<?>> void register(Class<O> objectType) {
         if(objectType == null) {
             throw new IllegalArgumentException("Passing null to register(...) is not allowed");
         }
@@ -63,11 +64,12 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> boolean contains(O object) {
+    public <K, O extends Storable<K>> boolean contains(O object) {
         if(object == null) {
             throw new IllegalArgumentException("Passing null object to contains(...) is not allowed");
         }
-        Class objectType = object.getClass();
+        //noinspection rawtypes
+        Class<? extends Storable> objectType = object.getClass();
         if(object instanceof Proxy) {
             objectType = ((ObjectProxyHandler)Proxy.getInvocationHandler(object)).getObjectType();
         }
@@ -79,7 +81,7 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
         if(!storageCells.containsKey(type)) {
             throw new IllegalArgumentException("Trying to call contains(...) on unregistered type " + type.getName());
         }
-        return storageCells.get(type).get(id) != null;
+        return getCell(type).get(id) != null;
     }
 
     @Override
@@ -90,9 +92,9 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
         if(!storageCells.containsKey(type)) {
             throw new IllegalArgumentException("Trying to call getSome(...) on unregistered type " + type.getName());
         }
-        List<O> toReturn = new ArrayList<O>();
+        List<O> toReturn = new ArrayList<>();
         for(K key: keys) {
-            O value = (O)storageCells.get(type).get(key);
+            O value = getCell(type).get(key);
             if(value != null) {
                 toReturn.add(value);
             }
@@ -101,18 +103,18 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> List<O> getAll(Class<O> type) {
+    public <K, O extends Storable<K>> List<O> getAll(Class<O> type) {
         if(type == null) {
             throw new IllegalArgumentException("Passing null type to getAll(...) is not allowed");
         }
         if(!storageCells.containsKey(type)) {
             throw new IllegalArgumentException("Trying to call getAll(...) on unregistered type " + type.getName());
         }
-        return new ArrayList<O>(storageCells.get(type).values());
+        return new ArrayList<>(getCell(type).values());
     }
 
     @Override
-    public <O extends Storable> int getSize(Class<O> type) {
+    public <O extends Storable<?>> int getSize(Class<O> type) {
         if(type == null) {
             throw new IllegalArgumentException("Passing null type to getSize(...) is not allowed");
         }
@@ -126,7 +128,7 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
     public ObjectBuilderFactory getBuilderFactory() {
         return new DefaultObjectBuilderFactory() {
             @Override
-            protected FieldMapping getFieldMapping(Class<? extends Storable> objectType) {
+            protected FieldMapping getFieldMapping(Class<? extends Storable<?>> objectType) {
                 if(storageCells.containsKey(objectType)) {
                     return storageCells.get(objectType).getFieldMapping();
                 }
@@ -138,18 +140,19 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    public <O extends Storable> O put(O object) {
+    public <K, O extends Storable<K>> O put(O object) {
         if(object == null) {
             throw new IllegalArgumentException("Passing null object to put(...) is not allowed");
         }
-        Class objectType = object.getClass();
+        //noinspection rawtypes
+        Class<? extends Storable> objectType = object.getClass();
         if(object instanceof Proxy) {
             objectType = ((ObjectProxyHandler)Proxy.getInvocationHandler(object)).getObjectType();
         }
         if(!storageCells.containsKey(objectType)) {
             throw new IllegalArgumentException("Trying to call put(...) on unregistered type " + objectType.getName());
         }
-        storageCells.get(objectType).put(object);
+        getCell(objectType).put(object);
         return object;
     }
 
@@ -164,11 +167,11 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
         if(!storageCells.containsKey(objectType)) {
             throw new IllegalArgumentException("Trying to call remove(...) on unregistered type " + objectType.getName());
         }
-        storageCells.get(objectType).remove(ids);
+        getCell(objectType).remove(ids);
     }
 
     @Override
-    public <O extends Storable> void removeAll(Class<O> objectType) {
+    public <K, O extends Storable<K>> void removeAll(Class<O> objectType) {
         if(objectType == null) {
             throw new IllegalArgumentException("Passing null object type to removeAll(...) is not allowed");
         }
@@ -179,31 +182,36 @@ public class DefaultObjectStorage extends AbstractObjectStorage {
     }
 
     @Override
-    protected <O extends Storable> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
+    protected <O extends Storable<?>> Class<O> getStorableTypeFromObject(O object) throws ObjectStorageException {
         Class<O> type = super.getStorableTypeFromObject(object);
         if(type != null) {
             return type;
         }
         
         //Custom detection
-        Class candidate = (Class)object.getClass();
+        Class<O> candidate = (Class<O>)object.getClass();
         if(storageCells.containsKey(candidate)) {
            type = candidate; 
         }
         else if(object instanceof Proxy) {
             InvocationHandler invocationHandler = Proxy.getInvocationHandler(object);
             if(invocationHandler instanceof ObjectProxyHandler) {
-                type = (Class)((ObjectProxyHandler)invocationHandler).getFieldMapping().getObjectType();
+                type = (Class<O>)((ObjectProxyHandler)invocationHandler).getFieldMapping().getObjectType();
             }
         }        
         return type;
+    }
+
+    private <K, O extends Storable<K>> Cell<K, O> getCell(Class<O> objectClass) {
+        //noinspection rawtypes
+        return (Cell)storageCells.get((Class)objectClass);
     }
     
     private static class Cell<K, V extends Storable<K>> implements ObjectCache<K, V> {
         final FieldMapping fieldMapping;
         final ObjectCache<K, V> cache;
 
-        public Cell(FieldMapping fieldMapping, ObjectCache cache) {
+        public Cell(FieldMapping fieldMapping, ObjectCache<K, V> cache) {
             this.fieldMapping = fieldMapping;
             this.cache = cache;
         }

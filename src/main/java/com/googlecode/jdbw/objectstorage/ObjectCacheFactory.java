@@ -18,6 +18,6 @@
  */
 package com.googlecode.jdbw.objectstorage;
 
-public interface ObjectCacheFactory {
-    ObjectCache createObjectCache();
+public interface ObjectCacheFactory<K, V extends Storable<K>> {
+    ObjectCache<?, ? extends Storable<?>> createObjectCache();
 }

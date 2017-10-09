@@ -29,7 +29,7 @@ public class ConcurrentHashMapObjectCache<K, V extends Storable<K>> implements O
     private final ConcurrentHashMap<K, V> hashMap;
 
     public ConcurrentHashMapObjectCache() {
-        hashMap = new ConcurrentHashMap<K, V>();
+        hashMap = new ConcurrentHashMap<>();
     }
     
     @Override
@@ -62,9 +62,9 @@ public class ConcurrentHashMapObjectCache<K, V extends Storable<K>> implements O
         return hashMap.size();
     }
     
-    public static class Factory implements ObjectCacheFactory {
+    public static class Factory<K, V extends Storable<K>> implements ObjectCacheFactory<K, V> {
         @Override
-        public ObjectCache createObjectCache() {
+        public ObjectCache<K, V> createObjectCache() {
             return new ConcurrentHashMapObjectCache();
         }        
     }

@@ -59,7 +59,7 @@ public interface ExecuteResultHandler {
      * @param row All the data values of the row, as returned by {@code ResultSet.getObject(..)}.
      * @return true if you want to read more rows, false if you want to close the result set and skip remaining rows
      */
-    boolean nextRow(Object[] row);
+    boolean nextRow(Object... row);
 
     /**
      * Callback called for queries that updated rows. Not all servers supports this and some JDBC drivers doesn't handle

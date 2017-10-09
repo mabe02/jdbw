@@ -19,5 +19,5 @@
 package com.googlecode.jdbw.objectstorage;
 
 public interface FieldMappingFactory {
-    FieldMapping createFieldMapping(Class<? extends Storable> objectType);
+    FieldMapping createFieldMapping(Class<? extends Storable<?>> objectType);
 }

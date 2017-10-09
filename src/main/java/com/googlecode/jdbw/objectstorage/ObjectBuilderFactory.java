@@ -27,6 +27,7 @@ public interface ObjectBuilderFactory {
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> B newObject(Class<B> builderType, K key);
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> B newObject(Class<B> builderType, K key, O template);
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> B newObject(Class<B> builderType, K key, Map<String, Object> initialValues);
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> List<B> newObjects(Class<B> builderType, K... keys);
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> List<B> newObjects(Class<B> builderType, Collection<K> keys);
 }

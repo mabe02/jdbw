@@ -63,8 +63,8 @@ public class DefaultFieldMappingTest extends TestBase {
     public void testGetObjectType() {
         System.out.println("getObjectType");
         DefaultFieldMapping instance = new DefaultFieldMapping(Person.class);
-        Class expResult = Person.class;
-        Class result = instance.getObjectType();
+        Class<?> expResult = Person.class;
+        Class<?> result = instance.getObjectType();
         assertEquals(expResult, result);
     }
 
@@ -127,8 +127,8 @@ public class DefaultFieldMappingTest extends TestBase {
     public void testGetFieldNames() {
         System.out.println("getFieldNames");
         DefaultFieldMapping instance = new DefaultFieldMapping(Person.class);
-        Set<String> expResult = new HashSet<String>(Arrays.asList("age", "name", "birthday"));
-        Set<String> result = new HashSet<String>(instance.getFieldNames());
+        Set<String> expResult = new HashSet<>(Arrays.asList("age", "name", "birthday"));
+        Set<String> result = new HashSet<>(instance.getFieldNames());
         assertEquals(expResult, result);
     }
 
@@ -139,8 +139,8 @@ public class DefaultFieldMappingTest extends TestBase {
     public void testGetFieldTypes() {
         System.out.println("getFieldTypes");
         DefaultFieldMapping instance = new DefaultFieldMapping(Person.class);
-        Set<Class> expResult = new HashSet<Class>(Arrays.<Class>asList(int.class, String.class, Date.class));
-        Set<Class> result = new HashSet<Class>(instance.getFieldTypes());
+        Set<Class<?>> expResult = new HashSet<>(Arrays.<Class<?>>asList(int.class, String.class, Date.class));
+        Set<Class<?>> result = new HashSet<>(instance.getFieldTypes());
         assertEquals(expResult, result);
     }
 }

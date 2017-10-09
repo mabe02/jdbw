@@ -15,7 +15,7 @@ public class DBCP2DataSourceFactory implements DataSourceFactory {
     @Override
     public DataSource newDataSource(String url, Properties properties) {
         try {
-            Class basicDataSourceClass = Class.forName("org.apache.commons.dbcp2.BasicDataSource");
+            Class<? extends DataSource> basicDataSourceClass = (Class<? extends DataSource>)Class.forName("org.apache.commons.dbcp2.BasicDataSource");
             DataSource ds = (DataSource)basicDataSourceClass.newInstance();
             Method setUrlMethod = basicDataSourceClass.getMethod("setUrl", String.class);
             Method addConnectionPropertyMethod = basicDataSourceClass.getMethod("addConnectionProperty", String.class, String.class);

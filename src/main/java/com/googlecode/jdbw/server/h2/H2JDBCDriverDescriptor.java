@@ -67,7 +67,7 @@ public class H2JDBCDriverDescriptor implements JDBCDriverDescriptor<H2DatabaseCo
     }
     
     @Override
-    public String formatJDBCUrl(DatabaseServer databaseServer) {
+    public String formatJDBCUrl(DatabaseServer<H2DatabaseConnectionFactory> databaseServer) {
         if(!(databaseServer instanceof H2DatabaseServer)) {
             throw new IllegalArgumentException("H2JDBCDriverDescriptor only supports H2DatabaseServer");
         }
@@ -80,7 +80,7 @@ public class H2JDBCDriverDescriptor implements JDBCDriverDescriptor<H2DatabaseCo
     }
 
     @Override
-    public H2DatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer databaseServer) {
+    public H2DatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer<H2DatabaseConnectionFactory> databaseServer) {
         if(!(databaseServer instanceof H2DatabaseServer)) {
             throw new IllegalArgumentException("Cannot pass in " + databaseServer + " to " +
                     "H2JDBCDriverDescriptor.createDatabaseConnectionFactory(..)");

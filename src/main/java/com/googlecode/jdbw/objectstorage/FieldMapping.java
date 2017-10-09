@@ -22,11 +22,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public interface FieldMapping {
-    Class<? extends Storable> getObjectType();
+    Class<? extends Storable<?>> getObjectType();
     String getFieldName(String methodName);
     String getFieldName(Method method);
     int getFieldIndex(String fieldName);
     int getFieldIndex(Method method);
     List<String> getFieldNames();
-    List<Class> getFieldTypes();
+    List<Class<?>> getFieldTypes();
 }

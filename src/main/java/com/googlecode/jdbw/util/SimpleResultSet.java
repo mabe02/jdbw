@@ -45,8 +45,8 @@ public class SimpleResultSet implements ResultSet {
      * Creates a new and empty {@code SimpleResultSet}
      */
     public SimpleResultSet() {
-        this.rows = new ArrayList<Object[]>();
-        this.nameMap = new HashMap<String, Integer>();
+        this.rows = new ArrayList<>();
+        this.nameMap = new HashMap<>();
         this.pointer = -1;
     }
 
@@ -54,7 +54,7 @@ public class SimpleResultSet implements ResultSet {
      * Creates a new {@code SimpleResultSet} with pre-defined set of columns
      * @param columnNames Names of the columns to pre-create
      */
-    public SimpleResultSet(String[] columnNames) {
+    public SimpleResultSet(String... columnNames) {
         this();
         for(int i = 0; i < columnNames.length; i++) {
             if(columnNames[i] == null) {
@@ -68,7 +68,7 @@ public class SimpleResultSet implements ResultSet {
      * Creates a new {@code SimpleResultSet} based on a single row of data
      * @param row Data row to initialize the result set to
      */
-    public SimpleResultSet(Object[] row) {
+    public SimpleResultSet(Object... row) {
         this();
         this.rows.add(row);
     }
@@ -98,7 +98,7 @@ public class SimpleResultSet implements ResultSet {
      * Adds a single row to the result set
      * @param row Data to set the new row to
      */
-    public void addRow(Object[] row) {
+    public void addRow(Object... row) {
         this.rows.add(row);
     }
     

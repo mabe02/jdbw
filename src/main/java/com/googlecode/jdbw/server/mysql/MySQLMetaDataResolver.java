@@ -24,6 +24,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javax.sql.DataSource;
 
 /**
@@ -43,7 +44,7 @@ class MySQLMetaDataResolver extends DefaultServerMetaData {
 
     @Override
     public Schema getSchema(Catalog catalog, String schemaName) throws SQLException {
-        if("schema".equals(schemaName)) {
+        if(Objects.equals("schema", schemaName)) {
             return getSchemas(catalog).get(0);
         }
         else {
@@ -54,6 +55,6 @@ class MySQLMetaDataResolver extends DefaultServerMetaData {
     //TODO: Fix this properly by loading primary keys from DatabaseMetaData using the appropriate method
     @Override
     protected Index createIndex(Table table, String indexName, short type, boolean unique, TableColumn firstColumn) {
-        return super.createIndex(table, indexName, "PRIMARY".equals(indexName) ? DatabaseMetaData.tableIndexClustered : type, unique, firstColumn);
+        return super.createIndex(table, indexName, Objects.equals("PRIMARY", indexName) ? DatabaseMetaData.tableIndexClustered : type, unique, firstColumn);
     }
 }

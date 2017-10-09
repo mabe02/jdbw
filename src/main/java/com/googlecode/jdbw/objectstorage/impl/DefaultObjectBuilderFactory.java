@@ -78,6 +78,7 @@ public class DefaultObjectBuilderFactory implements ObjectBuilderFactory {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <K, O extends Storable<K>, B extends ObjectBuilder<O>> List<B> newObjects(Class<B> builderType, K... keys) {
         return newObjects(builderType, Arrays.asList(keys));
     }
@@ -87,18 +88,18 @@ public class DefaultObjectBuilderFactory implements ObjectBuilderFactory {
         if(builderType == null) {
             throw new IllegalArgumentException("Passing null type to ObjectBuilder.Factory.newObjects(...) is not allowed");
         }
-        List<B> builders = new ArrayList<B>();
+        List<B> builders = new ArrayList<>();
         for(K key: keys) {
             builders.add(newBuilderProxy(builderType, key));
         }
         return builders;
     }
         
-    protected FieldMapping getFieldMapping(Class<? extends Storable> objectType) {
+    protected FieldMapping getFieldMapping(Class<? extends Storable<?>> objectType) {
         return new DefaultFieldMapping(objectType);
     }
     
-    private Class<? extends Storable> resolveStorable(Class builderType) {
+    private Class<? extends Storable<?>> resolveStorable(Class<?> builderType) {
         if(!ObjectBuilder.class.isAssignableFrom(builderType)) {
             return null;
         }
@@ -106,8 +107,8 @@ public class DefaultObjectBuilderFactory implements ObjectBuilderFactory {
             if(type instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType)type;
                 if(parameterizedType.getRawType() == ObjectBuilder.class) {
-                    if(Storable.class.isAssignableFrom((Class)parameterizedType.getActualTypeArguments()[0])) {
-                        return (Class)parameterizedType.getActualTypeArguments()[0];
+                    if(Storable.class.isAssignableFrom((Class<?>)parameterizedType.getActualTypeArguments()[0])) {
+                        return (Class<? extends Storable<?>>)parameterizedType.getActualTypeArguments()[0];
                     }
                 }                
             }

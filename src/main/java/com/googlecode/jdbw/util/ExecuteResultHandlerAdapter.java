@@ -36,7 +36,7 @@ public class ExecuteResultHandlerAdapter implements ExecuteResultHandler {
     }
 
     @Override
-    public boolean nextRow(Object[] row) {
+    public boolean nextRow(Object... row) {
         return true;
     }
 

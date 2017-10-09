@@ -92,7 +92,7 @@ public class DelegatingTableMapping implements TableMapping {
     }
 
     @Override
-    public Class<? extends Storable> getObjectType() {
+    public Class<? extends Storable<?>> getObjectType() {
         return backend.getObjectType();
     }
 
@@ -122,7 +122,7 @@ public class DelegatingTableMapping implements TableMapping {
     }
 
     @Override
-    public List<Class> getFieldTypes() {
+    public List<Class<?>> getFieldTypes() {
         return backend.getFieldTypes();
     }
 }

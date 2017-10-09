@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import javax.sql.DataSource;
 
@@ -57,33 +58,30 @@ class SybaseASEMetaDataResolver extends DefaultServerMetaData {
 
     @Override
     public List<TableColumn> getColumns(Table table) throws SQLException {
-        Connection pooledConnection = dataSource.getConnection();
-        try {
-            List<TableColumn> result = new ArrayList<TableColumn>();
+        try (Connection pooledConnection = dataSource.getConnection()) {
+            List<TableColumn> result = new ArrayList<>();
             ResultSet resultSet = getTableColumnMetadata(pooledConnection, table);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 result.add(
                         createTableColumn(
-                            table,
-                            resultSet.getInt("ORDINAL_POSITION"),
-                            resultSet.getString("COLUMN_NAME"),
-                            resultSet.getInt("DATA_TYPE"),
-                            resultSet.getString("TYPE_NAME"),
-                            resultSet.getInt("COLUMN_SIZE"),
-                            resultSet.getInt("DECIMAL_DIGITS"),
-                            resultSet.getInt("NULLABLE"),
-                            null));
+                                table,
+                                resultSet.getInt("ORDINAL_POSITION"),
+                                resultSet.getString("COLUMN_NAME"),
+                                resultSet.getInt("DATA_TYPE"),
+                                resultSet.getString("TYPE_NAME"),
+                                resultSet.getInt("COLUMN_SIZE"),
+                                resultSet.getInt("DECIMAL_DIGITS"),
+                                resultSet.getInt("NULLABLE"),
+                                null));
             }
             return result;
-        } finally {
-            pooledConnection.close();
         }
     }
 
     @Override
     protected ResultSet getStoredProcedureMetadata(Connection pooledConnection, Schema schema, String procedureName) throws SQLException {
         SQLWorker worker = new SQLWorker(new SybaseExecutor(pooledConnection));
-        List<Object[]> rows = new ArrayList<Object[]>();
+        List<Object[]> rows = new ArrayList<>();
         for(String foundProcedureName: worker.leftColumnAsString(
                 "SELECT name FROM " + schema.getCatalog().getName() + "..sysobjects WHERE type = 'P' ORDER BY name ASC")) {
             
@@ -110,10 +108,10 @@ class SybaseASEMetaDataResolver extends DefaultServerMetaData {
                 "     " + catalogName + "." + schemaName + ".sysindexes i " + 
                 "WHERE o.name = ? AND o.type = 'U' AND " + 
                 "         o.id = i.id", table.getName());
-        Set<String> clusteredIndexes = new HashSet<String>();
+        Set<String> clusteredIndexes = new HashSet<>();
         for(Object[] row: rows) {
             String indexName = (row[0] != null ? row[0].toString().trim() : null);
-            if(indexName == null || "".equals(indexName) || clusteredIndexes.contains(indexName)) {
+            if(indexName == null || Objects.equals("", indexName) || clusteredIndexes.contains(indexName)) {
                 continue;
             }
             
@@ -126,7 +124,7 @@ class SybaseASEMetaDataResolver extends DefaultServerMetaData {
         }
         
         try {
-            Map<String, Index> result = new HashMap<String, Index>();
+            Map<String, Index> result = new HashMap<>();
             ResultSet resultSet = getIndexMetadata(pooledConnection, table);
             while(resultSet.next()) {
                 String indexName = resultSet.getString("INDEX_NAME");
@@ -148,7 +146,7 @@ class SybaseASEMetaDataResolver extends DefaultServerMetaData {
                                 tableColumns.get(columnName)));
                 }
             }
-            return sortIndexList(new ArrayList<Index>(result.values()));
+            return sortIndexList(new ArrayList<>(result.values()));
         } finally {
             pooledConnection.close();
         }

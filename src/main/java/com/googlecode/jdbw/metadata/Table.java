@@ -149,11 +149,11 @@ public class Table implements Comparable<Table> {
      * @throws SQLException In an error occurred while reading information from the database
      */
     public Map<String, Index> getIndexMap() throws SQLException {
-        Map<String, Index> indexMap = new TreeMap<String, Index>();
+        Map<String, Index> indexMap = new TreeMap<>();
         for(Index index : getIndexes()) {
             indexMap.put(index.getName(), index);
         }
-        return new HashMap<String, Index>(indexMap);
+        return new HashMap<>(indexMap);
     }
 
     /**
@@ -164,7 +164,7 @@ public class Table implements Comparable<Table> {
      */
     public TableColumn getColumn(String columnName) throws SQLException {
         for(TableColumn column: getColumns()) {
-            if(column.getName().equals(columnName)) {
+            if(Objects.equals(column.getName(), columnName)) {
                 return column;
             }
         }
@@ -190,11 +190,11 @@ public class Table implements Comparable<Table> {
      * @throws SQLException In an error occurred while reading information from the database
      */
     public Map<String, TableColumn> getColumnMap() throws SQLException {
-        Map<String, TableColumn> columnMap = new TreeMap<String, TableColumn>();
+        Map<String, TableColumn> columnMap = new TreeMap<>();
         for(TableColumn column : getColumns()) {
             columnMap.put(column.getName(), column);
         }
-        return new HashMap<String, TableColumn>(columnMap);
+        return new HashMap<>(columnMap);
     }
 
     /**

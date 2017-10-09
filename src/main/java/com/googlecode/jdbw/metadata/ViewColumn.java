@@ -18,6 +18,8 @@
  */
 package com.googlecode.jdbw.metadata;
 
+import java.util.Objects;
+
 /**
  * A column is a part of a database table, holding a specific value for every
  * row in the table. The column will have a determined type and depending on
@@ -82,10 +84,10 @@ public class ViewColumn extends Column {
         }
 
         ViewColumn other = (ViewColumn) obj;
-        return getView().getSchema().getCatalog().getName().equals(other.getView().getSchema().getCatalog().getName())
-                && getView().getSchema().getName().equals(other.getView().getSchema().getName())
-                && getView().getName().equals(other.getView().getName())
-                && getName().equals(other.getName());
+        return Objects.equals(getView().getSchema().getCatalog().getName(), other.getView().getSchema().getCatalog().getName())
+                && Objects.equals(getView().getSchema().getName(), other.getView().getSchema().getName())
+                && Objects.equals(getView().getName(), other.getView().getName())
+                && Objects.equals(getName(), other.getName());
     }
 
     @Override

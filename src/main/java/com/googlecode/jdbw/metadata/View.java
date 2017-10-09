@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -85,7 +86,7 @@ public class View implements Comparable<View> {
      */
     public ViewColumn getColumn(String columnName) throws SQLException {
         for(ViewColumn column: metaDataResolver.getColumns(this)) {
-            if(column.getName().equals(columnName)) {
+            if(Objects.equals(column.getName(), columnName)) {
                 return column;
             }
         }
@@ -98,11 +99,11 @@ public class View implements Comparable<View> {
      * @throws SQLException If there was a database error when loading the columns
      */
     public Map<String, ViewColumn> getColumnMap() throws SQLException {
-        Map<String, ViewColumn> columnMap = new TreeMap<String, ViewColumn>();
+        Map<String, ViewColumn> columnMap = new TreeMap<>();
         for(ViewColumn column : getColumns()) {
             columnMap.put(column.getName(), column);
         }
-        return new HashMap<String, ViewColumn>(columnMap);
+        return new HashMap<>(columnMap);
     }
 
     /**

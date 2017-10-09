@@ -171,7 +171,7 @@ public class SimpleTest extends TestBase {
         assertEquals(0, objectStorage.getSize(Person.class));
     }
 
-    private void assertSetEquals(Collection a, Collection b) {
+    private void assertSetEquals(Collection<?> a, Collection<?> b) {
         assertEquals(new HashSet(a), new HashSet(b));
     }
 }

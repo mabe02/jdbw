@@ -30,19 +30,19 @@ import java.util.TreeMap;
 
 public class DefaultFieldMapping implements FieldMapping {
 
-    private final Class<? extends Storable> objectType;
+    private final Class<? extends Storable<?>> objectType;
     private final Map<String, Integer> fieldIndexMap;
-    private final SortedMap<String, Class> fieldTypeMap;
+    private final SortedMap<String, Class<?>> fieldTypeMap;
 
-    public DefaultFieldMapping(Class<? extends Storable> objectType) {
+    public DefaultFieldMapping(Class<? extends Storable<?>> objectType) {
         this.objectType = objectType;
-        this.fieldIndexMap = new TreeMap<String, Integer>();
-        this.fieldTypeMap = new TreeMap<String, Class>();
+        this.fieldIndexMap = new TreeMap<>();
+        this.fieldTypeMap = new TreeMap<>();
         resolveFields();
     }
     
     @Override
-    public Class<? extends Storable> getObjectType() {
+    public Class<? extends Storable<?>> getObjectType() {
         return objectType;
     }
 
@@ -74,12 +74,12 @@ public class DefaultFieldMapping implements FieldMapping {
     
     @Override
     public List<String> getFieldNames() {
-        return new ArrayList<String>(fieldTypeMap.keySet());
+        return new ArrayList<>(fieldTypeMap.keySet());
     }
 
     @Override
-    public List<Class> getFieldTypes() {
-        return new ArrayList<Class>(fieldTypeMap.values());
+    public List<Class<?>> getFieldTypes() {
+        return new ArrayList<>(fieldTypeMap.values());
     }
     
     private void resolveFields() {

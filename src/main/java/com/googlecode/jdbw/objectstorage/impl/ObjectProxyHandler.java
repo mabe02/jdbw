@@ -23,13 +23,14 @@ import com.googlecode.jdbw.objectstorage.ObjectStorageException;
 import com.googlecode.jdbw.objectstorage.Storable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 class ObjectProxyHandler implements InvocationHandler {
     private final FieldMapping fieldMapping;
     private final Object key;
     private final Object[] fields;
 
-    ObjectProxyHandler(FieldMapping fieldMapping, Object key, Object[] fields) {
+    ObjectProxyHandler(FieldMapping fieldMapping, Object key, Object... fields) {
         this.fieldMapping = fieldMapping;
         this.key = key;
         this.fields = fields;
@@ -37,7 +38,7 @@ class ObjectProxyHandler implements InvocationHandler {
     
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if(method.getName().equals("getId")) {
+        if(Objects.equals(method.getName(), "getId")) {
             return getKey();
         }
         else if(fieldMapping.getFieldName(method) != null) {
@@ -46,17 +47,17 @@ class ObjectProxyHandler implements InvocationHandler {
             }
             return fields[fieldMapping.getFieldIndex(method)];
         }
-        else if("toString".equals(method.getName())) {
+        else if(Objects.equals("toString", method.getName())) {
             return toString();
         }
-        else if("hashCode".equals(method.getName())) {
+        else if(Objects.equals("hashCode", method.getName())) {
             return key.hashCode();
         }
-        else if("equals".equals(method.getName()) && args != null && args.length == 1) {
+        else if(Objects.equals("equals", method.getName()) && args != null && args.length == 1) {
             return fieldMapping.getObjectType().isAssignableFrom(args[0].getClass()) &&
-                    key.equals(((Storable)args[0]).getId());
+                    Objects.equals(key, ((Storable<?>)args[0]).getId());
         }
-        else if("storableType".equals(method.getName()) && method.getParameterTypes().length == 0) {
+        else if(Objects.equals("storableType", method.getName()) && method.getParameterTypes().length == 0) {
             return fieldMapping.getObjectType();
         }
         else {
@@ -64,7 +65,7 @@ class ObjectProxyHandler implements InvocationHandler {
         }
     }
 
-    public Class<? extends Storable> getObjectType() {
+    public Class<? extends Storable<?>> getObjectType() {
         return fieldMapping.getObjectType();
     }
     

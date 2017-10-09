@@ -63,7 +63,7 @@ public class Index implements Comparable<Index> {
         this.unique = unique;
         this.clustered = clustered;
         this.primaryKey = primaryKey;
-        this.columns = new ArrayList<TableColumn>();
+        this.columns = new ArrayList<>();
         this.columns.addAll(Arrays.asList(columns));
     }
 
@@ -113,7 +113,7 @@ public class Index implements Comparable<Index> {
      * @return Name of all column that are part of this index
      */
     public List<String> getColumnNames() {
-        List<String> list = new ArrayList<String>(columns.size());
+        List<String> list = new ArrayList<>(columns.size());
         for(Column column : columns) {
             list.add(column.getName());
         }

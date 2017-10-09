@@ -70,7 +70,7 @@ public class OneSharedConnectionDataSource implements DataSource {
      * @param connection Connection that the new {@code OneSharedConnectionDataSource} will use
      */
     public OneSharedConnectionDataSource(Connection connection) {
-        this.connectionQueue = new ArrayBlockingQueue<Connection>(1);
+        this.connectionQueue = new ArrayBlockingQueue<>(1);
         this.connectionQueue.add(connection);
     }
 

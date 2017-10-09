@@ -18,7 +18,7 @@ import java.util.Properties;
  * Sample implementation to demonstrate how to use JDBW
  */
 public class Sample {
-    public static void main(String[] args) {
+    public static void main(String... args) {
         PostgreSQLServer postgreSQLServer = new PostgreSQLServer("my-db-server.mydomain.com", 5432, "catalog1");
         DatabaseConnectionFactory databaseConnectionFactory = postgreSQLServer.newConnectionFactory();
         ((AuthenticatingDatabaseConnectionFactory)databaseConnectionFactory).setUsername("my-user");

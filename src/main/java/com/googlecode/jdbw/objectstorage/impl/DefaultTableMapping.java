@@ -26,11 +26,11 @@ public class DefaultTableMapping extends DefaultFieldMapping implements TableMap
     
     private final String tableName;
     
-    public DefaultTableMapping(Class<? extends Storable> objectType) {
+    public DefaultTableMapping(Class<? extends Storable<?>> objectType) {
         this(objectType, objectType.getSimpleName());
     }
     
-    public DefaultTableMapping(Class<? extends Storable> objectType, String tableName) {
+    public DefaultTableMapping(Class<? extends Storable<?>> objectType, String tableName) {
         super(objectType);
         this.tableName = tableName;
     }

@@ -130,7 +130,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
     public void testGetSome() {
         System.out.println("getSome");
         JDBCObjectStorage instance = getObjectStorage();
-        Set<Integer> expectedKeys = new HashSet<Integer>();
+        Set<Integer> expectedKeys = new HashSet<>();
         expectedKeys.add(1);
         expectedKeys.add(2);
         List<Person> result = instance.getSome(Person.class, 1, 2);
@@ -149,7 +149,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
     public void testGetAll() {
         System.out.println("getAll");
         JDBCObjectStorage instance = getObjectStorage();
-        Set<Integer> expectedKeys = new HashSet<Integer>();
+        Set<Integer> expectedKeys = new HashSet<>();
         expectedKeys.add(1);
         expectedKeys.add(2);
         expectedKeys.add(3);
@@ -228,7 +228,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
     public void testPutAll() throws SQLException {
         System.out.println("putAll");
         JDBCObjectStorage instance = getObjectStorage();
-        Set<Person> expectedResult = new HashSet<Person>();
+        Set<Person> expectedResult = new HashSet<>();
         Person.Builder builder = instance.getBuilderFactory().newObject(Person.Builder.class, 4);
         builder.setAge(85);
         builder.setBirthday(new DateMidnight("1890-03-12").toDate());
@@ -242,7 +242,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
         expectedResult.add(builder.build());
         
         instance.putAll(expectedResult);
-        Set<Person> result = new HashSet<Person>(instance.getSome(Person.class, 4, 5));
+        Set<Person> result = new HashSet<>(instance.getSome(Person.class, 4, 5));
         assertEquals(expectedResult, result);
         
         assertEquals(5, getWorker().topLeftValueAsInt("SELECT COUNT(*) FROM \"Person\"").intValue());
@@ -255,7 +255,7 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
     public void testRemove() throws SQLException {
         System.out.println("remove");
         JDBCObjectStorage instance = getObjectStorage();
-        Map<Integer, Person> allPersons = new HashMap<Integer, Person>();
+        Map<Integer, Person> allPersons = new HashMap<>();
         for(Person person: instance.getAll(Person.class)) {
             allPersons.put(person.getId(), person);
         }
@@ -264,8 +264,8 @@ public class JDBCObjectStorageTest extends H2DatabaseTestBase {
         instance.remove(randomPerson);
         allPersons.remove(randomPerson.getId());
         assertEquals(allPersons.size(), instance.getSize(Person.class));
-        assertEquals(new HashSet<Person>(allPersons.values()), 
-                new HashSet<Person>(instance.getAll(Person.class)));
+        assertEquals(new HashSet<>(allPersons.values()),
+                new HashSet<>(instance.getAll(Person.class)));
         
         assertEquals(allPersons.size(), getWorker().topLeftValueAsInt("SELECT COUNT(*) FROM \"Person\"").intValue());
         assertEquals(0, getWorker().topLeftValueAsInt("SELECT COUNT(*) FROM \"Person\" WHERE \"id\" = ?", randomPerson.getId()).intValue());

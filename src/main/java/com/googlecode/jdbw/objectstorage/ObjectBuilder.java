@@ -18,6 +18,6 @@
  */
 package com.googlecode.jdbw.objectstorage;
 
-public interface ObjectBuilder<O extends Storable> {
+public interface ObjectBuilder<O extends Storable<?>> {
     O build();
 }

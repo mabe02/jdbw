@@ -39,6 +39,6 @@ public class BatchUpdateHandlerAdapter implements BatchUpdateHandler {
     }
 
     @Override
-    public void onBatchResult(int[] returnCodes) {
+    public void onBatchResult(int... returnCodes) {
     }
 }

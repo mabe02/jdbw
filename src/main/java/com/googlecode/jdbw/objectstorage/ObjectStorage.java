@@ -23,37 +23,41 @@ import java.util.List;
 
 public interface ObjectStorage {
 
-    <O extends Storable> void register(Class<O> objectType);
+    <O extends Storable<?>> void register(Class<O> objectType);
     
     ObjectBuilderFactory getBuilderFactory();
     
-    <O extends Storable> boolean contains(O object);
+    <K, O extends Storable<K>> boolean contains(O object);
     
     <K, O extends Storable<K>> boolean contains(Class<O> type, K id);
 
     <K, O extends Storable<K>> O get(Class<O> type, K id);
-    
+
+    @SuppressWarnings("unchecked")
     <K, O extends Storable<K>> List<O> getSome(Class<O> type, K... ids);
     
     <K, O extends Storable<K>> List<O> getSome(Class<O> type, Collection<K> ids);
 
-    <O extends Storable> List<O> getAll(Class<O> type);
+    <K, O extends Storable<K>> List<O> getAll(Class<O> type);
     
-    <O extends Storable> int getSize(Class<O> type);
+    <O extends Storable<?>> int getSize(Class<O> type);
 
-    <O extends Storable> O put(O object);
+    <K, O extends Storable<K>> O put(O object);
 
-    <O extends Storable> List<O> putAll(O... objects);
+    @SuppressWarnings("unchecked")
+    <K, O extends Storable<K>> List<O> putAll(O... objects);
 
-    <O extends Storable> List<O> putAll(Collection<O> objects);
-    
-    <O extends Storable> void remove(O... objects);
+    <K, O extends Storable<K>> List<O> putAll(Collection<O> objects);
 
-    <O extends Storable> void remove(Collection<O> objects);
-    
+    @SuppressWarnings("unchecked")
+    <K, O extends Storable<K>> void remove(O... objects);
+
+    <K, O extends Storable<K>> void remove(Collection<O> objects);
+
+    @SuppressWarnings("unchecked")
     <K, O extends Storable<K>> void remove(Class<O> objectType, K... ids);
     
     <K, O extends Storable<K>> void remove(Class<O> objectType, Collection<K> ids);
     
-    <O extends Storable> void removeAll(Class<O> objectType);
+    <K, O extends Storable<K>> void removeAll(Class<O> objectType);
 }

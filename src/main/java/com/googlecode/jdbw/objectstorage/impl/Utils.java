@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Utils {
-    static List removeNullElements(List list) {
-        List newList = new ArrayList(list.size());
-        for(Object element: list) {
+    static <T> List<T> removeNullElements(List<T> list) {
+        List<T> newList = new ArrayList<>(list.size());
+        for(T element: list) {
             if(element != null) {
                 newList.add(element);
             }

@@ -42,7 +42,7 @@ public interface BatchUpdateHandler {
      * Callback method for the return codes of the batch
      * @param returnCodes The return codes from the batch query
      */
-    public void onBatchResult(int []returnCodes);
+    public void onBatchResult(int... returnCodes);
 
     /**
      * Callback method for generated keys that happened during the batch. This method will be called once for every

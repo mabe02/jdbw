@@ -22,6 +22,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -189,14 +190,14 @@ public abstract class Column implements Comparable<Column> {
             return false;
         }
         final Column other = (Column) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         if (this.sqlType != other.sqlType) {
             return false;
         }
-        final Set<Integer> sizeMatters = 
-                new HashSet<Integer>(
+        final Set<Integer> sizeMatters =
+                new HashSet<>(
                         Arrays.asList(
                                 //String types
                                 Types.CHAR, Types.VARCHAR, Types.BINARY, Types.VARBINARY, Types.NCHAR, Types.NVARCHAR,

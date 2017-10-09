@@ -35,11 +35,11 @@ public class MySQLJDBCDriverDescriptor implements JDBCDriverDescriptor<MySQLData
     }
 
     @Override
-    public String formatJDBCUrl(DatabaseServer databaseServer) {
+    public String formatJDBCUrl(DatabaseServer<MySQLDatabaseConnectionFactory> databaseServer) {
         return formatJDBCUrl(
-                ((StandardDatabaseServer)databaseServer).getHostname(),
-                ((StandardDatabaseServer)databaseServer).getPort(),
-                ((StandardDatabaseServer)databaseServer).getDefaultCatalog());
+                ((StandardDatabaseServer<MySQLDatabaseConnectionFactory>)databaseServer).getHostname(),
+                ((StandardDatabaseServer<MySQLDatabaseConnectionFactory>)databaseServer).getPort(),
+                ((StandardDatabaseServer<MySQLDatabaseConnectionFactory>)databaseServer).getDefaultCatalog());
     }
 
     /**
@@ -54,7 +54,7 @@ public class MySQLJDBCDriverDescriptor implements JDBCDriverDescriptor<MySQLData
     }
 
     @Override
-    public MySQLDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer databaseServer) {
+    public MySQLDatabaseConnectionFactory createDatabaseConnectionFactory(DatabaseServer<MySQLDatabaseConnectionFactory> databaseServer) {
         return new MySQLDatabaseConnectionFactory(formatJDBCUrl(databaseServer));
     }
 }

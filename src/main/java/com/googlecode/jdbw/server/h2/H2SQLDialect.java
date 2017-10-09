@@ -44,7 +44,7 @@ public class H2SQLDialect extends DefaultSQLDialect {
     
     @Override
     public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes) {
-        List<String> SQL = new ArrayList<String>();
+        List<String> SQL = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE \"").append(name).append("\"(\n");
         for(Column column : columns) {

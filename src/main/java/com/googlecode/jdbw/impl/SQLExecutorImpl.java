@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is an implementation of the {@code SQLExecutor} that provides most of the functionality required for
@@ -253,7 +254,7 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
     // MySQLExecutor for an example.
     protected boolean canGetGeneratedKeys(String SQL) {
         return SQL.trim().length() >= "insert".length() &&
-                SQL.trim().substring(0, "insert".length()).toLowerCase().equals("insert");
+                Objects.equals(SQL.trim().substring(0, "insert".length()).toLowerCase(), "insert");
     }
 
     protected boolean canCancelQueries() {

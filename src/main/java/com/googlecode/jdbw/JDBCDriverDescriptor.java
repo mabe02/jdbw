@@ -44,7 +44,7 @@ public interface JDBCDriverDescriptor<T extends DatabaseConnectionFactory> {
      * @return JDBC url formatted for this driver
      * @throws IllegalArgumentException If the databaseServer is not supported by this driver descriptor
      */
-    String formatJDBCUrl(DatabaseServer databaseServer);
+    String formatJDBCUrl(DatabaseServer<T> databaseServer);
 
     /**
      * Creates a connection factory specially designed for connecting to the server using this driver. This generally
@@ -53,5 +53,5 @@ public interface JDBCDriverDescriptor<T extends DatabaseConnectionFactory> {
      * @param databaseServer Database server to pre-initialize the connection factory for
      * @return Connection factory that can be used to establish a connection to the given database using this driver
      */
-    T createDatabaseConnectionFactory(DatabaseServer databaseServer);
+    T createDatabaseConnectionFactory(DatabaseServer<T> databaseServer);
 }

@@ -18,6 +18,8 @@
  */
 package com.googlecode.jdbw.metadata;
 
+import java.util.Objects;
+
 /**
  * A {@code TableColumn} is a part of a database table, holding a specific value for every
  * row in the table. The column will have a determined type and depending on the type 
@@ -81,10 +83,10 @@ public class TableColumn extends Column {
         }
 
         TableColumn other = (TableColumn) obj;
-        return getTable().getSchema().getCatalog().getName().equals(other.getTable().getSchema().getCatalog().getName())
-                && getTable().getSchema().getName().equals(other.getTable().getSchema().getName())
-                && getTable().getName().equals(other.getTable().getName())
-                && getName().equals(other.getName());
+        return Objects.equals(getTable().getSchema().getCatalog().getName(), other.getTable().getSchema().getCatalog().getName())
+                && Objects.equals(getTable().getSchema().getName(), other.getTable().getSchema().getName())
+                && Objects.equals(getTable().getName(), other.getTable().getName())
+                && Objects.equals(getName(), other.getName());
     }
 
     @Override

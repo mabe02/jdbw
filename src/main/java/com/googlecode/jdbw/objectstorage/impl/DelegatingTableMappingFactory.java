@@ -36,7 +36,7 @@ public class DelegatingTableMappingFactory implements TableMappingFactory {
     }
     
     @Override
-    public TableMapping createTableMapping(Class<? extends Storable> objectType) {
+    public TableMapping createTableMapping(Class<? extends Storable<?>> objectType) {
         return backend.createTableMapping(objectType);
     }    
 }

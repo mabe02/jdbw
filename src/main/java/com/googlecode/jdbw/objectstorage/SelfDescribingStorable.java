@@ -19,5 +19,5 @@
 package com.googlecode.jdbw.objectstorage;
 
 public interface SelfDescribingStorable {
-    <O extends Storable> Class<O> storableType();
+    <O extends Storable<?>> Class<O> storableType();
 }

@@ -61,12 +61,12 @@ public class MySQLJDBCObjectStorage extends JDBCObjectStorage {
     }
     
     @Override
-    protected <O extends Object & Storable> void doPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws SQLException {
+    protected <O extends Object & Storable<?>> void doPutAll(Class<O> objectType, Collection<O> objects, TableMapping tableMapping) throws SQLException {
         DatabaseTransaction transaction = null;
         try {
             String sql = ((MySQLTableMapping)tableMapping).getMySQLInsertOrUpdate();
             transaction = getDatabaseConnection().beginTransaction(TransactionIsolation.REPEATABLE_READ);
-            List<Object[]> batch = new ArrayList<Object[]>();
+            List<Object[]> batch = new ArrayList<>();
             for(O o: objects) {
                 batch.add(transform(tableMapping, o));
             }

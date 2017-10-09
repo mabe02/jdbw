@@ -22,6 +22,7 @@ import com.googlecode.jdbw.objectstorage.FieldMapping;
 import com.googlecode.jdbw.objectstorage.ObjectFactory;
 import com.googlecode.jdbw.objectstorage.ObjectStorageException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 class BuilderProxyHandler extends ObjectProxyHandler {
     
@@ -59,7 +60,7 @@ class BuilderProxyHandler extends ObjectProxyHandler {
             setFieldValue(method, args[0]);
             return proxy;
         }
-        else if("build".equals(method.getName())) {
+        else if(Objects.equals("build", method.getName())) {
             FieldMapping fieldMapping = getFieldMapping();
             Object[] idAndValues = new Object[getFields().length + 1];
             idAndValues[0] = getKey();
