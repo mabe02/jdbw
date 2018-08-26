@@ -28,7 +28,8 @@ import com.googlecode.jdbw.server.StandardDatabaseServer;
  * @author Martin Berglund
  */
 public class MySQLServer extends StandardDatabaseServer<MySQLDatabaseConnectionFactory> {
-    
+
+    public static final String DEFAULT_MYSQL_SCHEMA_NAME = "schema";
     public static final int DEFAULT_MYSQL_PORT = 3306;
     
     public MySQLServer(String hostname, String catalog) {

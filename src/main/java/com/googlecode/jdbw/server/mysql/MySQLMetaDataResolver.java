@@ -39,12 +39,12 @@ class MySQLMetaDataResolver extends DefaultServerMetaData {
 
     @Override
     public List<Schema> getSchemas(Catalog catalog) throws SQLException {
-        return Arrays.asList(createSchema(catalog, "schema"));
+        return Arrays.asList(createSchema(catalog, MySQLServer.DEFAULT_MYSQL_SCHEMA_NAME));
     }
 
     @Override
     public Schema getSchema(Catalog catalog, String schemaName) throws SQLException {
-        if(Objects.equals("schema", schemaName)) {
+        if(Objects.equals(MySQLServer.DEFAULT_MYSQL_SCHEMA_NAME, schemaName)) {
             return getSchemas(catalog).get(0);
         }
         else {
