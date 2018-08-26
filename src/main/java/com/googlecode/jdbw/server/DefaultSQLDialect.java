@@ -273,7 +273,7 @@ public class DefaultSQLDialect implements SQLDialect {
     
     protected String formatDecimal(Object value) {
         if(value instanceof BigDecimal) {
-            return ((BigDecimal) value).toPlainString();
+            return ((BigDecimal) value).stripTrailingZeros().toPlainString();
         }
         if(value instanceof BigInteger) {
             return value.toString();
