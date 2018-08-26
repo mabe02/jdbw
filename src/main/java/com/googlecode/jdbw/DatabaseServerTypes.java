@@ -20,6 +20,7 @@
 package com.googlecode.jdbw;
 
 import com.googlecode.jdbw.server.h2.H2ServerType;
+import com.googlecode.jdbw.server.mysql.MariaDBServerType;
 import com.googlecode.jdbw.server.mysql.MySQLServerType;
 import com.googlecode.jdbw.server.postgresql.PostgreSQLServerType;
 import com.googlecode.jdbw.server.sybase.SybaseASEServerType;
@@ -46,6 +47,11 @@ public class DatabaseServerTypes {
      * DatabaseServerType implementation for MySQL (mostly compatible with MariaDB and other derivatives)
      */
     public static final MySQLServerType MYSQL = MySQLServerType.INSTANCE;
+
+    /**
+     * DatabaseServerType implementation for MariaDB (mostly compatible with MySQL and other derivatives)
+     */
+    public static final MariaDBServerType MARIA_DB = MariaDBServerType.INSTANCE;
 
     /**
      * DatabaseServerType implementation for Sybase ASE
