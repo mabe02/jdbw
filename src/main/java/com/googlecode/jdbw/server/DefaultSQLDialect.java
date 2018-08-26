@@ -329,6 +329,14 @@ public class DefaultSQLDialect implements SQLDialect {
         if(value instanceof BigInteger) {
             return value.toString();
         }
+        if(value instanceof Boolean) {
+            if(((Boolean)value).booleanValue()) {
+                return "1";
+            }
+            else {
+                return "0";
+            }
+        }
 
         try {
             return new BigDecimal(value.toString()).toBigInteger().toString();
