@@ -74,7 +74,7 @@ public class SybaseASESQLDialect extends DefaultSQLDialect {
     }
     
     @Override
-    public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes)
+    public String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes)
     {
         List<String> statements = new ArrayList<>();
         StringBuilder sb = new StringBuilder();

@@ -118,11 +118,11 @@ class MySQLDialect extends DefaultSQLDialect {
     }
 
     @Override
-    public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes) {
+    public String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes) {
         return getCreateTableStatement(schemaName, name, columns, indexes, false);
     }
 
-    public String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes, boolean decimalDates) {
+    public String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes, boolean decimalDates) {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE `").append(name).append("`(\n");
         for(Column column : columns) {

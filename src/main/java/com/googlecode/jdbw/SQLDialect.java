@@ -97,7 +97,7 @@ public interface SQLDialect {
      * @param indexes List of indexes the table should have
      * @return An array of SQL that will create the table described
      */
-    String[] getCreateTableStatement(String schemaName, String name, List<Column> columns, List<Index> indexes);
+    String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes);
 
     /**
      * Generates an SQL statement that will drop the table specified
