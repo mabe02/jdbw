@@ -1,6 +1,6 @@
 /*
  * This file is part of jdbw (http://code.google.com/p/jdbw/).
- * 
+ *
  * jdbw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Copyright (C) 2007-2012 Martin Berglund
  */
 package com.googlecode.jdbw.server.h2;
@@ -31,17 +31,22 @@ import java.util.List;
  * @author Martin Berglund
  */
 public class H2SQLDialect extends DefaultSQLDialect {
-    
+
     @Override
     public String escapeIdentifier(String identifier) {
         return "\"" + identifier + "\"";
     }
 
     @Override
+    public String escapeString(String string) {
+        return string.replaceAll("'", "''");
+    }
+
+    @Override
     public String getUseCatalogStatement(String catalogName) {
         return null;
     }
-    
+
     @Override
     public String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes) {
         List<String> SQL = new ArrayList<String>();
@@ -60,7 +65,7 @@ public class H2SQLDialect extends DefaultSQLDialect {
         sb.delete(sb.length() - 2, sb.length()).append("\n");
         sb.append(")");
         SQL.add(sb.toString());
-                
+
         for(Index index : indexes) {
             sb = new StringBuilder("CREATE ");
             if(index.isPrimaryKey()) {
@@ -68,7 +73,7 @@ public class H2SQLDialect extends DefaultSQLDialect {
             }
             else if(index.isUnique()) {
                 sb.append("UNIQUE INDEX \"").append(name).append(".").append(index.getName()).append("\" ");
-            } 
+            }
             else {
                 sb.append("INDEX \"").append(name).append(".").append(index.getName()).append("\" ");
             }
@@ -79,7 +84,7 @@ public class H2SQLDialect extends DefaultSQLDialect {
         }
         return SQL.toArray(new String[SQL.size()]);
     }
-    
+
     //This may be a column from any other database so don't make any assumptions!
     private String getH2Datatype(Column column) {
         if(isBigDecimal(column.getSqlType())) {
