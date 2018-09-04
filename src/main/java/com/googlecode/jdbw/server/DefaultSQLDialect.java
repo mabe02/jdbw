@@ -1,6 +1,6 @@
 /*
  * This file is part of jdbw (http://code.google.com/p/jdbw/).
- * 
+ *
  * jdbw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Copyright (C) 2007-2012 Martin Berglund
  */
 package com.googlecode.jdbw.server;
@@ -48,8 +48,8 @@ public class DefaultSQLDialect implements SQLDialect {
     private static final DateFormat defaultTimestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static final DateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final DateFormat defaultTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-    
-    
+
+
     @Override
     public String escapeString(String string) {
         return string;
@@ -80,7 +80,7 @@ public class DefaultSQLDialect implements SQLDialect {
             return defaultTimeFormat.format(date);
         }
     }
-    
+
     @Override
     public String formatValue(Object value, int targetType) {
         if(value == null) {
@@ -192,7 +192,7 @@ public class DefaultSQLDialect implements SQLDialect {
         }
         return object;
     }
-    
+
     protected Object createExampleObject(int sqlType) {
         if(isBigDecimal(sqlType)) {
             return new BigDecimal("20100101000000.000");
@@ -217,7 +217,7 @@ public class DefaultSQLDialect implements SQLDialect {
                     + "unimplemented java.sql.Types constant (" + sqlType + ")");
         }
     }
-    
+
     public static boolean isBigDecimal(int sqlType) {
         return sqlType == Types.NUMERIC
                 || sqlType == Types.DECIMAL;
@@ -270,7 +270,7 @@ public class DefaultSQLDialect implements SQLDialect {
                 || sqlType == Types.LONGVARBINARY
                 || sqlType == Types.VARBINARY;
     }
-    
+
     protected String formatDecimal(Object value) {
         if(value instanceof BigDecimal) {
             return ((BigDecimal) value).stripTrailingZeros().toPlainString();
@@ -297,6 +297,14 @@ public class DefaultSQLDialect implements SQLDialect {
             if(Boolean.parseBoolean((String) value)) {
                 return "true";
             } else {
+                return "false";
+            }
+        }
+        if(value instanceof Number) {
+            if(((Number)value).longValue() != 0) {
+                return "true";
+            }
+            else {
                 return "false";
             }
         }
