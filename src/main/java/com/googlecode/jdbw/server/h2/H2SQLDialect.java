@@ -51,7 +51,11 @@ public class H2SQLDialect extends DefaultSQLDialect {
     public String[] getCreateTableStatement(String schemaName, String name, List<? extends Column> columns, List<Index> indexes) {
         List<String> SQL = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE \"").append(name).append("\"(\n");
+        sb.append("CREATE TABLE \"");
+        if (schemaName != null) {
+            sb.append(schemaName).append("\".\"");
+        }
+        sb.append(name).append("\"(\n");
         for(Column column : columns) {
             sb.append("\t\"").append(column.getName()).append("\" ");
             sb.append(getH2Datatype(column));
@@ -77,7 +81,11 @@ public class H2SQLDialect extends DefaultSQLDialect {
             else {
                 sb.append("INDEX \"").append(name).append(".").append(index.getName()).append("\" ");
             }
-            sb.append(" ON \"").append(name).append("\" (\"");
+            sb.append(" ON \"");
+            if (schemaName != null) {
+                sb.append(schemaName).append("\".\"");
+            }
+            sb.append(name).append("\" (\"");
             sb.append(StringUtils.concatenateStringList(index.getColumnNames(), "\",\""));
             sb.append("\")");
             SQL.add(sb.toString());
