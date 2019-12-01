@@ -81,9 +81,9 @@ public class OneSharedConnectionDataSource implements DataSource {
      */
     public void close() {
         try {
-            connectionQueue.poll().close();
+            connectionQueue.take().close();
         }
-        catch(SQLException e) {
+        catch(SQLException | InterruptedException e) {
             LOGGER.error("Unable to close database connection", e);
         }
     }
