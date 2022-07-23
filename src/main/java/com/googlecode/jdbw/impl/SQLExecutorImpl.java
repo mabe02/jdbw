@@ -181,12 +181,14 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
             int[] batchResult = executeBatch(statement);
             handler.onBatchResult(batchResult);
 
-            ResultSet generatedKeys = getGeneratedKeys(statement);
-            if (generatedKeys != null) {
-                while (generatedKeys.next()) {
-                    handler.onGeneratedKey(generatedKeys.getObject(1));
+            if (isBatchWriteGeneratedKeyRetrievalAvailable()) {
+                ResultSet generatedKeys = getGeneratedKeys(statement);
+                if (generatedKeys != null) {
+                    while (generatedKeys.next()) {
+                        handler.onGeneratedKey(generatedKeys.getObject(1));
+                    }
+                    generatedKeys.close();
                 }
-                generatedKeys.close();
             }
 
             SQLWarning warning = getWarnings(statement);
@@ -223,12 +225,14 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
             int[] batchResult = executeBatch(statement);
             handler.onBatchResult(Arrays.copyOf(batchResult, batchResult.length));
 
-            ResultSet generatedKeys = getGeneratedKeys(statement);
-            if (generatedKeys != null) {
-                while (generatedKeys.next()) {
-                    handler.onGeneratedKey(generatedKeys.getObject(1));
+            if (isBatchWriteGeneratedKeyRetrievalAvailable()) {
+                ResultSet generatedKeys = getGeneratedKeys(statement);
+                if (generatedKeys != null) {
+                    while (generatedKeys.next()) {
+                        handler.onGeneratedKey(generatedKeys.getObject(1));
+                    }
+                    generatedKeys.close();
                 }
-                generatedKeys.close();
             }
 
             SQLWarning warning = getWarnings(statement);
@@ -339,6 +343,10 @@ public abstract class SQLExecutorImpl implements SQLExecutor {
 
     protected PreparedStatement prepareBatchUpdateStatement(String SQL) throws SQLException {
         return connection.prepareStatement(SQL, Statement.NO_GENERATED_KEYS);
+    }
+
+    protected boolean isBatchWriteGeneratedKeyRetrievalAvailable() {
+        return false;
     }
 
     private PreparedStatement prepareExecuteStatement(String SQL) throws SQLException {

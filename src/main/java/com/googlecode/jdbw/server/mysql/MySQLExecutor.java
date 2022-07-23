@@ -55,6 +55,11 @@ class MySQLExecutor extends SQLExecutorImpl {
     }
 
     @Override
+    protected boolean isBatchWriteGeneratedKeyRetrievalAvailable() {
+        return true;
+    }
+
+    @Override
     protected void executeUpdate(Statement statement, String SQL) throws SQLException {
         super.executeUpdate(statement, SQL);
     }

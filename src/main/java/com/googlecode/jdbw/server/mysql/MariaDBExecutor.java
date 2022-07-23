@@ -40,4 +40,9 @@ class MariaDBExecutor extends MySQLExecutor {
     protected PreparedStatement prepareBatchUpdateStatement(String SQL) throws SQLException {
         return connection.prepareStatement(SQL, Statement.NO_GENERATED_KEYS);
     }
+
+    @Override
+    protected boolean isBatchWriteGeneratedKeyRetrievalAvailable() {
+        return false;
+    }
 }
