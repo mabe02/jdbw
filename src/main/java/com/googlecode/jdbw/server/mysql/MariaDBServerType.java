@@ -50,7 +50,7 @@ public class MariaDBServerType extends AbstractDatabaseType {
 
     @Override
     public SQLExecutor createExecutor(Connection connection) {
-        return new MySQLExecutor(connection);
+        return new MariaDBExecutor(connection);
     }
 
     @Override
